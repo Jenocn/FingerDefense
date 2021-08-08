@@ -1,0 +1,15 @@
+import "Unity";
+import "Game";
+
+function OnEnter(target) {
+    echo string_talk("npc_10020001_01");
+}
+
+function OnExit(target) {
+    echo string_talk("npc_10020001_02");
+}
+
+function OnExecute(target) {
+    echo string_talk("npc_10020001_03");
+    return true;
+}
