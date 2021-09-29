@@ -3,9 +3,17 @@ using UnityEngine;
 
 namespace Game.Managers {
 	public class DamageResult {
-		public int resultHP = 0;
-		public int damageValue = 0;
-		public bool bCrit = false;
+		public int resultHP { get; private set; } = 0;
+		public int damageValue { get; private set; } = 0;
+		public bool bCrit { get; private set; } = false;
+		public bool bDie { get; private set; } = false;
+
+		public DamageResult(int resultHP, int damageValue, bool bCrit) {
+			this.resultHP = resultHP;
+			this.damageValue = damageValue;
+			this.bCrit = bCrit;
+			bDie = (resultHP <= 0);
+		}
 	}
 	public class DamageManager : ManagerBase<DamageManager> {
 		public DamageResult CalcDamage(int curHP, AttackData attackData) {
@@ -15,18 +23,15 @@ namespace Game.Managers {
 			return CalcDamageNormal(curHP, attackData);
 		}
 		public DamageResult CalcDamageNormal(int curHP, AttackData attackData) {
-			var ret = new DamageResult();
-			ret.resultHP = Mathf.Max(0, curHP - attackData.attack);
-			ret.damageValue = curHP - ret.resultHP;
-			ret.bCrit = false;
-			return ret;
+			var resultHP = Mathf.Max(0, curHP - attackData.attack);
+			var damageValue = curHP - resultHP;
+			return new DamageResult(resultHP, damageValue, false);
 		}
 		public DamageResult CalcDamageCrit(int curHP, AttackData attackData) {
-			var ret = new DamageResult();
-			ret.resultHP = Mathf.Max(0, Mathf.FloorToInt(curHP - attackData.attack * (1 + attackData.critAttackPercentAdd)));
-			ret.damageValue = curHP - ret.resultHP;
-			ret.bCrit = true;
-			return ret;
+			var resultHP = Mathf.Max(0, Mathf.FloorToInt(
+				curHP - attackData.attack * (1 + attackData.critAttackPercentAdd)));
+			var damageValue = curHP - resultHP;
+			return new DamageResult(resultHP, damageValue, true);
 		}
 	}
 }

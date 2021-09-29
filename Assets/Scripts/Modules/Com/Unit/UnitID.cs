@@ -7,8 +7,11 @@ namespace Game.Modules {
         public int uniqueID { get => _uniqueID; }
 
         [SerializeField]
-        private ElementType _elementType = ElementType.None;
-        public ElementType elementType { get => _elementType; }
+        private ID_ElementType _elementType = ID_ElementType.None;
+        public ID_ElementType elementType { get => _elementType; }
 
+        [SerializeField]
+        private ID_CampType _campType = ID_CampType.Enemy;
+        public ID_CampType campType { get => _campType; }
     }
 }

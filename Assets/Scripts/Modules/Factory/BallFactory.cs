@@ -4,6 +4,7 @@ namespace Game.Modules {
 	public static class BallFactory {
 		public static UnitBall Create(int id, Vector3 position, Transform parent, Vector2 direction) {
 			var obj = BallCache.instance.New(id);
+			if (!obj) { return null; }
 			obj.transform.SetParent(parent);
 			obj.transform.position = position;
 

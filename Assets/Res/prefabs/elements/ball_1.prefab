@@ -13,8 +13,10 @@ GameObject:
   - component: {fileID: 5744218163107518226}
   - component: {fileID: 4783568065379150216}
   - component: {fileID: -5136232330862296709}
+  - component: {fileID: -8108178867516818498}
   - component: {fileID: 88359559489258884}
-  - component: {fileID: -5162806926241226492}
+  - component: {fileID: -866366461903632123}
+  - component: {fileID: -72240162697565878}
   m_Layer: 7
   m_Name: ball_1
   m_TagString: Untagged
@@ -76,12 +78,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 56d1bc0ce4d9f4194b0383989b882f50, type: 3}
+  m_Sprite: {fileID: -5463231447532522580, guid: 7ee75f33f22af45cc80994d2c2432f73, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.18, y: 0.18}
+  m_Size: {x: 0.08, y: 0.08}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -105,7 +107,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.08, y: 0.08}
-    newSize: {x: 0.18, y: 0.18}
+    newSize: {x: 0.08, y: 0.08}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -148,6 +150,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uniqueID: 1
   _elementType: 1
+  _campType: 0
+--- !u!114 &-8108178867516818498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5744218163107518224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b6a863c5aa1455ba6f4a745698b48c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &88359559489258884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +175,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27294078294142dea914acc414ee876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-5162806926241226492
+--- !u!114 &-866366461903632123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5744218163107518224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d2173e4853a4cfebddc0bd92877b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackData:
+    attack: 1
+    critPercent: 0
+    critAttackPercentAdd: 1
+--- !u!114 &-72240162697565878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,9 +203,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89d960ddc5cc14752adbf709f03919bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _velocity: 3
-  _dir: {x: 0, y: 0}
-  _attackData:
-    attack: 1
-    critPercent: 0
-    critAttackPercentAdd: 0
+  _velocity: 3.5
+  _direction: {x: 0, y: 0}

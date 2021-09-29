@@ -4,37 +4,65 @@ using Game.Systems;
 using UnityEngine;
 
 namespace Game.Modules {
-
-    [RequireComponent(typeof(UnitDestroy))]
+    [RequireComponent(typeof(UnitTriggerMain))]
     public class UnitBall : MonoBehaviour {
 
         [SerializeField]
         private float _velocity = 0.1f;
 
         [SerializeField]
-        private Vector2 _dir = Vector2.zero;
-        [SerializeField]
-        private AttackData _attackData = new AttackData();
-        public AttackData attackData { get => _attackData; }
+        private Vector2 _direction = Vector2.zero;
 
         private Vector2 _halfSize = Vector2.zero;
         private BoxCollider2D _collider = null;
         private Vector3 _prevPosition = Vector3.zero;
 
-        private UnitDestroy _unitDestroy = null;
+        private UnitTriggerMain _unitCollider = null;
+
+        private static List<System.Tuple<float, Vector2>> _dirList = new List<System.Tuple<float, Vector2>>() {
+            new System.Tuple<float, Vector2>(0.393f, new Vector2(0.92f, 0.38f)), // 22.5
+            new System.Tuple<float, Vector2>(0.785f, Vector2.one), // 45
+            new System.Tuple<float, Vector2>(1.178f, new Vector2(0.38f, 0.92f)), // 67.5
+            new System.Tuple<float, Vector2>(1.963f, new Vector2(-0.38f, 0.92f)), // 112.5
+            new System.Tuple<float, Vector2>(2.355f, new Vector2(-1, 1)), // 135
+            new System.Tuple<float, Vector2>(2.748f, new Vector2(-0.92f, 0.38f)), // 157.5
+            new System.Tuple<float, Vector2>(-0.393f, new Vector2(0.92f, -0.38f)), // -22.5
+            new System.Tuple<float, Vector2>(-0.785f, new Vector2(1, -1)), // -45
+            new System.Tuple<float, Vector2>(-1.178f, new Vector2(0.38f, -0.92f)), // -67.5
+            new System.Tuple<float, Vector2>(-1.963f, new Vector2(-0.38f, -0.92f)), // -112.5
+            new System.Tuple<float, Vector2>(-2.355f, new Vector2(-1, -1)), // -135
+            new System.Tuple<float, Vector2>(-2.748f, new Vector2(-0.92f, -0.38f)), // -157.5
+        };
 
         public void SetVelocity(float v) {
             _velocity = v;
         }
         public void SetDirection(Vector2 dir) {
-            _dir = dir;
-        }
-        public void SetDirection(float x, float y) {
-            _dir.Set(x, y);
+            _direction = dir;
         }
 
         private void Awake() {
-            _unitDestroy = GetComponent<UnitDestroy>();
+            _unitCollider = GetComponent<UnitTriggerMain>();
+
+            _unitCollider.triggerNotify.AddListener(this, (Collider2D other) => {
+                var unitID = other.GetComponent<UnitID>();
+                switch (unitID.elementType) {
+                case ID_ElementType.Brick:
+                    _OnTriggerBrick(other);
+                    break;
+                case ID_ElementType.Racket:
+                    _OnTriggerRacket(other);
+                    break;
+                case ID_ElementType.Edge:
+                    _OnTriggerEdge(other);
+                    break;
+                }
+                transform.position = Vector3.Lerp(transform.position, _prevPosition, 0.5f);
+            });
+        }
+
+        private void OnDestroy() {
+            _unitCollider.triggerNotify.RemoveListener(this);
         }
 
         // Start is called before the first frame update
@@ -47,39 +75,20 @@ namespace Game.Modules {
         void Update() {
             _prevPosition = transform.position;
 
-            if (Vector2.zero == _dir) {
+            if (Vector2.zero == _direction) {
                 return;
             }
 
             float deltaPosN = Time.deltaTime * _velocity;
-            var radain = Mathf.Atan2(_dir.y, _dir.x);
+            var radain = Mathf.Atan2(_direction.y, _direction.x);
             transform.Translate(Mathf.Cos(radain) * deltaPosN, Mathf.Sin(radain) * deltaPosN, 0);
-        }
-
-        private void OnTriggerEnter2D(Collider2D other) {
-            var unitID = other.GetComponent<UnitID>();
-            if (!unitID) {
-                return;
-            }
-            switch (unitID.elementType) {
-            case ElementType.Brick:
-                _OnTriggerBrick(other);
-                break;
-            case ElementType.Racket:
-                _OnTriggerRacket(other);
-                break;
-            case ElementType.Edge:
-                _OnTriggerEdge(other);
-                break;
-            }
-            transform.position = Vector3.Lerp(transform.position, _prevPosition, 0.5f);
         }
 
         private void _OnTriggerEdge(Collider2D target) {
             var unitEdge = target.GetComponent<UnitEdge>();
             var dir = unitEdge.direction.normalized;
-            var l = Mathf.Abs(Vector2.Dot(_dir.normalized, dir));
-            var fdir = (_dir.normalized + dir * l * 2).normalized;
+            var l = Mathf.Abs(Vector2.Dot(_direction.normalized, dir));
+            var fdir = (_direction.normalized + dir * l * 2).normalized;
             SetDirection(fdir);
         }
 
@@ -107,48 +116,56 @@ namespace Game.Modules {
 
             switch (minTag) {
             case 0:
-                if (_dir.x > 0) {
-                    _dir.x *= -1;
+                if (_direction.x > 0) {
+                    _direction.x *= -1;
                 } else {
-                    _dir.y *= -1;
+                    _direction.y *= -1;
                 }
                 break;
             case 1:
-                if (_dir.x < 0) {
-                    _dir.x *= -1;
+                if (_direction.x < 0) {
+                    _direction.x *= -1;
                 } else {
-                    _dir.y *= -1;
+                    _direction.y *= -1;
                 }
                 break;
             case 2:
-                if (_dir.y > 0) {
-                    _dir.y *= -1;
+                if (_direction.y > 0) {
+                    _direction.y *= -1;
                 } else {
-                    _dir.x *= -1;
+                    _direction.x *= -1;
                 }
                 break;
             case 3:
-                if (_dir.y < 0) {
-                    _dir.y *= -1;
+                if (_direction.y < 0) {
+                    _direction.y *= -1;
                 } else {
-                    _dir.x *= -1;
+                    _direction.x *= -1;
                 }
                 break;
             }
-
-            // notice brick
-            var unitBrick = target.GetComponent<UnitBrick>();
-            unitBrick.OnDamage(attackData);
         }
         private void _OnTriggerRacket(Collider2D target) {
             var unitRacket = target.GetComponent<UnitRacket>();
-            unitRacket.OnBallTrigger();
-            var tempX = Mathf.Lerp(unitRacket.triggerDirection.x, _dir.x, 0.2f);
-            var tempY = unitRacket.triggerDirection.y;
-            if (tempY == 0) {
-                tempY = 0.1f;
+            if (unitRacket.useDirection) {
+                SetDirection(_CalcDirFromRacket(unitRacket.triggerDirection));
+            } else {
+                _direction.y = Mathf.Abs(_direction.y);
             }
-            SetDirection(tempX, tempY);
+        }
+
+        private Vector2 _CalcDirFromRacket(Vector2 dir) {
+            var radain = Mathf.Atan2(dir.y, dir.x);
+            float v = 999.0f;
+            var ret = Vector2.zero;
+            foreach (var item in _dirList) {
+                var c = Mathf.Abs(radain - item.Item1);
+                if (c < v) {
+                    v = c;
+                    ret = item.Item2;
+                }
+            }
+            return ret;
         }
     }
 }

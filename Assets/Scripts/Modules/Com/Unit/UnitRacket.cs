@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Game.Modules {
     [RequireComponent(typeof(UnitDestroy))]
+    [RequireComponent(typeof(UnitTriggerSub))]
     public class UnitRacket : MonoBehaviour {
 
         [SerializeField]
@@ -16,20 +17,34 @@ namespace Game.Modules {
         private float _curSec = 0;
 
         private UnitDestroy _unitDestroy = null;
+        private UnitTriggerSub _unitTriggerSub = null;
         private SpriteRenderer _spriteRenderer = null;
         private bool _bDestroy = false;
+        private bool _bUseDirection = false;
+        public bool useDirection { get => _bUseDirection; }
 
         private void Awake() {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _unitDestroy = GetComponent<UnitDestroy>();
+            _unitTriggerSub = GetComponent<UnitTriggerSub>();
+
+            _unitTriggerSub.triggerNotify.AddListener(this, (Collider2D other) => {
+                Destroy();
+            });
         }
 
-        public void OnBallTrigger() {
-            Destroy();
+        private void OnDestroy() {
+            _unitTriggerSub.triggerNotify.RemoveListener(this);
+        }
+
+        public void ResetDirection() {
+            _bUseDirection = false;
+            _direction = Vector2.up;
         }
 
         public void SetDirection(Vector2 dir) {
             _direction = dir;
+            _bUseDirection = true;
         }
 
         public void Init() {

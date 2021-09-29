@@ -4,6 +4,7 @@ namespace Game.Modules {
 	public static class RacketFactory {
 		public static UnitRacket Create(int id, Vector3 position, Transform parent) {
 			var obj = RacketCache.instance.New(id);
+			if (!obj) { return null; }
 			obj.transform.SetParent(parent);
 			obj.transform.position = position;
 
@@ -13,6 +14,7 @@ namespace Game.Modules {
 			});
 
 			var ret = obj.GetComponent<UnitRacket>();
+			ret.ResetDirection();
 			ret.Init();
 
 			return ret;
