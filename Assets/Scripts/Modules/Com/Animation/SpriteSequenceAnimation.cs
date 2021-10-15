@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Game.Systems;
 using GCL.Pattern;
 using UnityEngine;
 
@@ -7,8 +8,35 @@ namespace Game.Modules {
     [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteSequenceAnimation : MonoBehaviour {
 
+        private static LogSystem.Logger _logger = null;
+
+        static SpriteSequenceAnimation() {
+            _logger = LogSystem.GetLogger("SpriteSequenceAnimation");
+        }
+
+        [System.Serializable]
+        public class FrameData {
+            public Sprite sprite = null;
+            public int frame = 1;
+        }
+        public class FrameIndex {
+            public FrameIndex(int main, int sub, int frame) {
+                mainIndex = main;
+                subIndex = sub;
+                frameIndex = frame;
+            }
+            public int mainIndex { get; private set; } = 0;
+            public int subIndex { get; private set; } = 0;
+            public int frameIndex { get; private set; } = 0;
+
+            public void Log() {
+                _logger.Log("main: " + mainIndex + ", sub: " + subIndex + ", frame: " + frameIndex);
+            }
+        }
+
         [SerializeField]
-        private List<Sprite> _sprites = null;
+        private List<FrameData> _frames = null;
+        private List<System.Tuple<Sprite, FrameIndex>> _sprites = new List<System.Tuple<Sprite, FrameIndex>>();
         [SerializeField, Range(0.1f, 60)]
         private float _fps = 10;
         [SerializeField]
@@ -17,7 +45,7 @@ namespace Game.Modules {
         private bool _playOnStart = true;
 
         private SpriteRenderer _spriteRenderer = null;
-        private SimpleNotify<int> _simpleFrameNotify = new SimpleNotify<int>();
+        private SimpleNotify<FrameIndex> _simpleFrameNotify = new SimpleNotify<FrameIndex>();
         private SimpleNotifyVoid _simpleEndNotify = new SimpleNotifyVoid();
         private int _index = 0;
         private float _timeCount = 0;
@@ -30,6 +58,7 @@ namespace Game.Modules {
         void Awake() {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _timeDuration = 1.0f / Mathf.Max(0.1f, _fps);
+            _InstallSprites();
         }
 
         void Start() {
@@ -60,8 +89,9 @@ namespace Game.Modules {
                         }
                     }
                 }
-                _spriteRenderer.sprite = _sprites[_index];
-                _simpleFrameNotify.Send(_index);
+                var curSprite = _sprites[_index];
+                _spriteRenderer.sprite = curSprite.Item1;
+                _simpleFrameNotify.Send(curSprite.Item2);
             }
         }
 
@@ -73,12 +103,17 @@ namespace Game.Modules {
         public void Play() {
             gameObject.SetActive(true);
             if (_index >= 0 && _index < size) {
-                _spriteRenderer.sprite = _sprites[_index];
+                var curSprite = _sprites[_index];
+                _spriteRenderer.sprite = curSprite.Item1;
                 _running = true;
-                _simpleFrameNotify.Send(_index);
+                _simpleFrameNotify.Send(curSprite.Item2);
             } else {
                 _running = false;
             }
+        }
+        public void Replay() {
+            _index = 0;
+            Play();
         }
         public void Pause() {
             _running = false;
@@ -90,12 +125,21 @@ namespace Game.Modules {
         public void RemoveEndCallback(object sender) {
             _simpleEndNotify.RemoveListener(sender);
         }
-        public void AddFrameCallback(object sender, System.Action<int> action) {
+        public void AddFrameCallback(object sender, System.Action<FrameIndex> action) {
             _simpleFrameNotify.AddListener(sender, action);
         }
         public void RemoveFrameCallback(object sender) {
             _simpleFrameNotify.RemoveListener(sender);
+        }
 
+        private void _InstallSprites() {
+            _sprites.Clear();
+            for (int i = 0; i < _frames.Count; ++i) {
+                var item = _frames[i];
+                for (int j = 0; j < item.frame; ++j) {
+                    _sprites.Add(new System.Tuple<Sprite, FrameIndex>(item.sprite, new FrameIndex(i, j, _sprites.Count)));
+                }
+            }
         }
     }
 }

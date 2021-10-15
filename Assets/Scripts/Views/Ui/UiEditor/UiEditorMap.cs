@@ -17,6 +17,7 @@ namespace Game.Views {
             public Vector2 position = Vector2.zero;
             public GameObject handleObject = null;
             public int id = 0;
+            public int hpMax = 0;
         }
 
         private Vector2Int _grid = Vector2Int.one;
@@ -30,6 +31,8 @@ namespace Game.Views {
 
         private InputField _inputFilename = null;
         private InputField _inputGrid = null;
+        private InputField _inputTypeID = null;
+        private InputField _inputHp = null;
 
         public override void OnInitUI() {
             var prefab = AssetSystem.Load<GameObject>("prefabs", "UiEditorMap");
@@ -63,6 +66,8 @@ namespace Game.Views {
                 });
                 _inputFilename = ui.Find("InputFieldFilename")?.GetComponent<InputField>();
                 _inputGrid = ui.Find("InputFieldGrid")?.GetComponent<InputField>();
+                _inputTypeID = ui.Find("InputFieldTypeID")?.GetComponent<InputField>();
+                _inputHp = ui.Find("InputFieldHp")?.GetComponent<InputField>();
             }
 
             _min = Camera.main.ScreenToWorldPoint(Vector3.zero);
@@ -80,12 +85,20 @@ namespace Game.Views {
                         return;
                     }
                     if (data.handleObject) {
-                        BrickCache.instance.Delete(data.handleObject);
+                        BrickFactory.Delete(data.handleObject);
                         data.handleObject = null;
                         data.id = 0;
+                        data.hpMax = 0;
                     } else {
-                        data.id = 1;
-                        data.handleObject = BrickFactory.Create(data.id, data.position, null).gameObject;
+                        if (int.TryParse(_inputTypeID.text.Trim(), out var typeID)) {
+                            data.id = typeID;
+                            if (int.TryParse(_inputHp.text.Trim(), out var hpMax)) {
+                                data.hpMax = hpMax;
+                            } else {
+                                data.hpMax = 1;
+                            }
+                            data.handleObject = BrickFactory.Create(data.id, data.hpMax, data.position, null)?.gameObject;
+                        }
                     }
                 }
             }
@@ -137,9 +150,24 @@ namespace Game.Views {
             return data;
         }
 
+        private void _Clear() {
+            _inputGrid.text = "1x1";
+            foreach (var item in _dataMap) {
+                if (item.Value.handleObject) {
+                    BrickFactory.Delete(item.Value.handleObject);
+                }
+            }
+            _dataMap.Clear();
+        }
+
         private void _LoadFromFile(string filename) {
             _Clear();
-            var element = TableMapdat.LoadElement(filename);
+            var absFilename = DIRECTORY_MAPDATA + filename + ".json";
+            if (!File.Exists(absFilename)) {
+                return;
+            }
+            var src = File.ReadAllText(absFilename);
+            var element = TableMapdat.LoadElementFromSrc(src);
             if (!element) {
                 return;
             }
@@ -150,19 +178,9 @@ namespace Game.Views {
                 data.index = item.index;
                 data.id = item.id;
                 data.position = item.position;
-                data.handleObject = BrickFactory.Create(data.id, data.position, null)?.gameObject;
+                data.handleObject = BrickFactory.Create(data.id, data.hpMax, data.position, null)?.gameObject;
                 _dataMap.Add(data.index, data);
             }
-        }
-
-        private void _Clear() {
-            _inputGrid.text = "1x1";
-            foreach (var item in _dataMap) {
-                if (item.Value.handleObject) {
-                    BrickCache.instance.Delete(item.Value.handleObject);
-                }
-            }
-            _dataMap.Clear();
         }
 
         private void _SaveToFile(string filename) {
@@ -188,6 +206,8 @@ namespace Game.Views {
                     ret += value.position.x;
                     ret += ",";
                     ret += value.position.y;
+                    ret += ",";
+                    ret += value.hpMax;
                     ret += "],";
 
                     bExist = true;
@@ -202,10 +222,12 @@ namespace Game.Views {
             if (!Directory.Exists("user")) {
                 Directory.CreateDirectory("user");
             }
-            if (!Directory.Exists("user/mapdata/")) {
-                Directory.CreateDirectory("user/mapdata/");
+            if (!Directory.Exists(DIRECTORY_MAPDATA)) {
+                Directory.CreateDirectory(DIRECTORY_MAPDATA);
             }
-            File.WriteAllText("user/mapdata/" + filename + ".json", ret);
+            File.WriteAllText(DIRECTORY_MAPDATA + filename + ".json", ret);
         }
+
+        private const string DIRECTORY_MAPDATA = "user/mapdata/";
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Modules {
 	public static class EffectFactory {
-		public static UnitBomb CreateBomb(int id, Vector3 position, Transform parent) {
+		public static UnitEffect Create(int id, Vector3 position, Transform parent) {
 			var obj = EffectCache.instance.New(id);
 			if (!obj) { return null; }
 
@@ -11,12 +11,15 @@ namespace Game.Modules {
 
 			var unitDestroy = obj.GetComponent<UnitDestroy>();
 			unitDestroy.ResetDestroyFunc((DestroyType type) => {
-				EffectCache.instance.Delete(obj);
+				Delete(obj);
 			});
 
-			var ret = obj.GetComponent<UnitBomb>();
+			var ret = obj.GetComponent<UnitEffect>();
 			ret.Init();
 			return ret;
+		}
+		public static void Delete(GameObject effectObject) {
+			EffectCache.instance.Delete(effectObject);
 		}
 	}
 }

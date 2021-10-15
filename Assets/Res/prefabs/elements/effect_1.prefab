@@ -16,7 +16,8 @@ GameObject:
   - component: {fileID: 767434165719233445}
   - component: {fileID: 8407837112743126235}
   - component: {fileID: 8771813067982343544}
-  - component: {fileID: -8427659162781647802}
+  - component: {fileID: 7159804505931692856}
+  - component: {fileID: 2958945970078149103}
   m_Layer: 11
   m_Name: effect_1
   m_TagString: Untagged
@@ -74,7 +75,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.32
+  m_Radius: 0.31
 --- !u!212 &7620323584383483348
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -115,8 +116,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3537b9ec558ff42f8b485b3c65a1d347, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -6087751958439044375, guid: 72d5f4ef404f5485180bfe1d99899250, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.7176471}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -182,7 +183,7 @@ MonoBehaviour:
     critPercent: 0
     critAttackPercentAdd: 1
   _bDestroyWhenAttack: 0
---- !u!114 &-8427659162781647802
+--- !u!114 &7159804505931692856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,6 +192,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1770834897895482008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5669f4bfc1c05486995b0458d7670eee, type: 3}
+  m_Script: {fileID: 11500000, guid: c717e905a2a584fdb9d4da9ccdfe05ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2958945970078149103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770834897895482008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95bdaac3fda4334fb780edac4ffccd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _frames:
+  - sprite: {fileID: -6087751958439044375, guid: 72d5f4ef404f5485180bfe1d99899250, type: 3}
+    frame: 1
+  - sprite: {fileID: -6960441931493179004, guid: 72d5f4ef404f5485180bfe1d99899250, type: 3}
+    frame: 3
+  _fps: 15
+  _loop: 0
+  _playOnStart: 1

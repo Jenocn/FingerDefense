@@ -10,13 +10,16 @@ namespace Game.Modules {
 
 			var unitDestroy = obj.GetComponent<UnitDestroy>();
 			unitDestroy.ResetDestroyFunc((DestroyType type) => {
-				BallCache.instance.Delete(obj);
+				Delete(obj);
 			});
 
 			var ret = obj.GetComponent<UnitBall>();
 			ret.SetDirection(direction);
 
 			return ret;
+		}
+		public static void Delete(GameObject ballObject) {
+			BallCache.instance.Delete(ballObject);
 		}
 	}
 }

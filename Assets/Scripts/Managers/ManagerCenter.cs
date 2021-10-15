@@ -5,6 +5,7 @@ namespace Game.Managers {
 	public static class ManagerCenter {
 		private static ManagerContainer _managers = new ManagerContainer();
 		private static void _RegisterManagers() {
+			_managers.Register<ScriptManager>();
 			_managers.Register<StringManager>();
 			_managers.Register<TableManager>();
 			// _managers.Register<InputManager>();

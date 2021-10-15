@@ -9,6 +9,7 @@ namespace Game.Tables {
 		public int index = 0;
 		public int id = 0;
 		public Vector2 position = Vector2.zero;
+		public int hpMax = 0;
 	}
 	public class TableMapdatElement : DataObject {
 		public Vector2Int gird = Vector2Int.zero;
@@ -34,7 +35,7 @@ namespace Game.Tables {
 				}
 				var file = JTokenHelper.GetString(item, "file", "");
 				if (!string.IsNullOrEmpty(file)) {
-					var element = LoadElement(file);
+					var element = LoadElementFromFile(file);
 					if (element) {
 						Emplace(id, element);
 					}
@@ -42,12 +43,15 @@ namespace Game.Tables {
 			});
 		}
 
-		public static TableMapdatElement LoadElement(string filename) {
+		public static TableMapdatElement LoadElementFromFile(string filename) {
 			var text = AssetSystem.Load<TextAsset>("mapdata", filename)?.text;
 			if (string.IsNullOrEmpty(text)) {
 				return null;
 			}
-			var jtoken = JSONTool.ParseToToken(text);
+			return LoadElementFromSrc(text);
+		}
+		public static TableMapdatElement LoadElementFromSrc(string src) {
+			var jtoken = JSONTool.ParseToToken(src);
 			if (jtoken == null) {
 				return null;
 			}
@@ -65,6 +69,7 @@ namespace Game.Tables {
 				elementItem.position.Set(
 					JTokenHelper.GetFloat(item, 2, 0),
 					JTokenHelper.GetFloat(item, 3, 0));
+				elementItem.hpMax = JTokenHelper.GetInt(item, 4, 0);
 				element.items.Add(elementItem);
 			});
 			return element;

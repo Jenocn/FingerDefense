@@ -109,8 +109,6 @@ class GameApplication : MonoBehaviour {
 			}
 		}
 
-		// ScriptSystem init
-		ScriptSystem.Init();
 		// ManagerCenter init
 		ManagerCenter.OnInitManagers();
 

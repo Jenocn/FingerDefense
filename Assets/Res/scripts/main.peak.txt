@@ -1,5 +1,3 @@
 
-import "Unity";
-import "Game";
 
 print("scripts startup...");

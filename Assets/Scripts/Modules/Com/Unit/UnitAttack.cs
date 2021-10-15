@@ -44,7 +44,7 @@ namespace Game.Modules {
 
                 var otherHealth = other.GetComponent<UnitHealth>();
                 if (otherHealth) {
-                    msg.damageResult = otherHealth.OnDamage(attackData);
+                    msg.damageResult = otherHealth.OnDamage(attackData, _unitID);
                 }
 
                 msg.bDamage = (msg.damageResult != null);

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -2874344954864803324}
   - component: {fileID: 4936165854981723978}
   m_Layer: 8
-  m_Name: brick_1
+  m_Name: brick_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 9043685742895155220, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+  m_Sprite: {fileID: -5895460876081152933, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1b5ff3a7de3c640b367d9eafa70226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uniqueID: 1
+  _uniqueID: 2
   _elementType: 2
   _campType: 1
 --- !u!114 &4372534927964028752
@@ -182,8 +182,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _binds:
   - hp: 1
-    sprite: {fileID: 9043685742895155220, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    sprite: {fileID: -5895460876081152933, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    hurt_sprite: {fileID: -8329684427622464183, guid: 6707dfb936a46431b94648a9a3736778, type: 3}
   - hp: 2
-    sprite: {fileID: 441429872136558457, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    sprite: {fileID: -8490346059057683276, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    hurt_sprite: {fileID: 5574735133521831591, guid: 6707dfb936a46431b94648a9a3736778, type: 3}
   - hp: 3
-    sprite: {fileID: 1495642012494673684, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    sprite: {fileID: 8886215585033900947, guid: b7725224a4e8540bc97a218fb322cae0, type: 3}
+    hurt_sprite: {fileID: 414498026836374950, guid: 6707dfb936a46431b94648a9a3736778, type: 3}

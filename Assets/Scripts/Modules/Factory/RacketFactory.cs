@@ -10,7 +10,7 @@ namespace Game.Modules {
 
 			var unitDestroy = obj.GetComponent<UnitDestroy>();
 			unitDestroy.ResetDestroyFunc((DestroyType type) => {
-				RacketCache.instance.Delete(obj);
+				Delete(obj);
 			});
 
 			var ret = obj.GetComponent<UnitRacket>();
@@ -18,6 +18,9 @@ namespace Game.Modules {
 			ret.Init();
 
 			return ret;
+		}
+		public static void Delete(GameObject racketObject) {
+			RacketCache.instance.Delete(racketObject);
 		}
 	}
 }

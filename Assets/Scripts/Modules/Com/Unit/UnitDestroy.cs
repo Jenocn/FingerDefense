@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,19 @@ namespace Game.Modules {
         public void ResetDestroyFunc(System.Action<DestroyType> action) {
             _actionDestroy = action;
         }
-        public void InvokeDestroy(DestroyType type) {
+        public void InvokeDestroy(DestroyType type, float delaySec = 0) {
+            if (delaySec > 0) {
+                StartCoroutine(_StartDestroy(type, delaySec));
+            } else {
+                _OnDestroy(type);
+            }
+        }
+
+        private IEnumerator _StartDestroy(DestroyType type, float sec) {
+            yield return new WaitForSeconds(sec);
+            _OnDestroy(type);
+        }
+        private void _OnDestroy(DestroyType type) {
             foreach (var item in _removeList) {
                 _destroyListeners.Remove(item);
             }
