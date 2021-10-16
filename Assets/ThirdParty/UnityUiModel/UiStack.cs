@@ -13,6 +13,13 @@ namespace UnityUiModel {
 				_root = gameObject;
 			}
 		}
+		private void OnDestroy() {
+			var p = _modelList.Last;
+			while (p != null) {
+				p.Value.OnDestroyUI();
+				p = p.Previous;
+			}
+		}
 
 		public TModel PushUI<TModel>() where TModel : UiModel {
 			if (_modelList.Count > 0) {

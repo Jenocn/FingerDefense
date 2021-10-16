@@ -54,6 +54,8 @@ namespace Game.Modules {
             });
             MessageCenter.AddListener<MessageFallIntoTrap>(this, (MessageFallIntoTrap msg) => {
                 _hitCount = 0;
+                // temp 临时
+                UnityEngine.SceneManagement.SceneManager.LoadScene("HomeScene");
             });
         }
 

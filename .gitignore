@@ -10,8 +10,6 @@
 /*.sln
 /*.csproj
 
-/[Pp]ackages/packages-lock.json
-
 /[Ll]ogs/
 /[Bb]in/
 /[Bb]uild/
