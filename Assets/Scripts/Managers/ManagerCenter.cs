@@ -11,6 +11,7 @@ namespace Game.Managers {
 			// _managers.Register<InputManager>();
 			_managers.Register<DamageManager>();
 			_managers.Register<MapManager>();
+			_managers.Register<ScoreManager>();
 		}
 
 		public static T GetManager<T>() where T : ManagerBase<T>, new() {

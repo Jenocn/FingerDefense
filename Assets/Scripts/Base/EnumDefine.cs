@@ -11,6 +11,7 @@ public enum ID_ElementType {
     Racket, // 球拍
     Edge, // 边缘
     Bomb, // 炸弹
+    Trap, // 陷阱
 }
 
 public enum ID_CampType {

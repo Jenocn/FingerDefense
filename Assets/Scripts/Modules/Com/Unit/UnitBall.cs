@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Game.Systems;
+using GCL.Pattern;
 using UnityEngine;
 
 namespace Game.Modules {
+    [RequireComponent(typeof(UnitID))]
     [RequireComponent(typeof(UnitTriggerMain))]
     public class UnitBall : MonoBehaviour {
 
@@ -17,6 +18,7 @@ namespace Game.Modules {
         private BoxCollider2D _collider = null;
         private Vector3 _prevPosition = Vector3.zero;
 
+        private UnitID _unitID = null;
         private UnitTriggerMain _unitCollider = null;
 
         private static List<System.Tuple<float, Vector2>> _dirList = new List<System.Tuple<float, Vector2>>() {
@@ -42,19 +44,23 @@ namespace Game.Modules {
         }
 
         private void Awake() {
+            _unitID = GetComponent<UnitID>();
             _unitCollider = GetComponent<UnitTriggerMain>();
 
             _unitCollider.triggerNotify.AddListener(this, (Collider2D other) => {
                 var unitID = other.GetComponent<UnitID>();
                 switch (unitID.elementType) {
                 case ID_ElementType.Brick:
-                    _OnTriggerBrick(other);
+                    _OnTriggerBrick(other, unitID);
                     break;
                 case ID_ElementType.Racket:
-                    _OnTriggerRacket(other);
+                    _OnTriggerRacket(other, unitID);
                     break;
                 case ID_ElementType.Edge:
-                    _OnTriggerEdge(other);
+                    _OnTriggerEdge(other, unitID);
+                    break;
+                case ID_ElementType.Trap:
+                    _OnTriggerTrap(other, unitID);
                     break;
                 }
                 transform.position = Vector3.Lerp(transform.position, _prevPosition, 0.5f);
@@ -84,7 +90,7 @@ namespace Game.Modules {
             transform.Translate(Mathf.Cos(radain) * deltaPosN, Mathf.Sin(radain) * deltaPosN, 0);
         }
 
-        private void _OnTriggerEdge(Collider2D target) {
+        private void _OnTriggerEdge(Collider2D target, UnitID targetID) {
             var unitEdge = target.GetComponent<UnitEdge>();
             var dir = unitEdge.direction.normalized;
             var l = Mathf.Abs(Vector2.Dot(_direction.normalized, dir));
@@ -92,7 +98,16 @@ namespace Game.Modules {
             SetDirection(fdir);
         }
 
-        private void _OnTriggerBrick(Collider2D target) {
+        private void _OnTriggerTrap(Collider2D target, UnitID targetID) {
+            var unitEdge = target.GetComponent<UnitEdge>();
+            if (unitEdge) {
+                // temp 临时
+                _OnTriggerEdge(target, targetID);
+            }
+            MessageCenter.Send(new MessageFallIntoTrap(_unitID.uniqueID));
+        }
+
+        private void _OnTriggerBrick(Collider2D target, UnitID targetID) {
             var targetHalfSize = new Vector2(target.bounds.size.x * 0.5f, target.bounds.size.y * 0.5f);
             Vector2 targetPos = target.transform.position;
 
@@ -145,13 +160,15 @@ namespace Game.Modules {
                 break;
             }
         }
-        private void _OnTriggerRacket(Collider2D target) {
+        private void _OnTriggerRacket(Collider2D target, UnitID targetID) {
             var unitRacket = target.GetComponent<UnitRacket>();
             if (unitRacket.useDirection) {
                 SetDirection(_CalcDirFromRacket(unitRacket.triggerDirection));
             } else {
                 _direction.y = Mathf.Abs(_direction.y);
             }
+
+            MessageCenter.Send(new MessageRacketHit(targetID.uniqueID, target.transform.position, _unitID.uniqueID));
         }
 
         private Vector2 _CalcDirFromRacket(Vector2 dir) {

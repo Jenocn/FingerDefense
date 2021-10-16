@@ -28,3 +28,42 @@ public class MessageBrickHit : MessageBase<MessageBrickHit> {
 	public int attackID { get; private set; } = 0;
 	public ID_ElementType attackElementType { get; private set; } = 0;
 }
+
+/// <summary>
+/// 撞击到球拍消息
+/// </summary>
+public class MessageRacketHit : MessageBase<MessageRacketHit> {
+	public MessageRacketHit(int racketID, Vector3 position, int ballID) {
+		this.racketID = racketID;
+		this.position = position;
+		this.ballID = ballID;
+	}
+
+	public int racketID { get; private set; } = 0;
+	public Vector3 position { get; private set; } = Vector3.zero; // 球拍坐标
+	public int ballID { get; private set; } = 0;
+}
+
+/// <summary>
+/// 球掉入陷阱消息
+/// </summary>
+public class MessageFallIntoTrap : MessageBase<MessageFallIntoTrap> {
+	public MessageFallIntoTrap(int ballID) {
+		this.ballID = ballID;
+	}
+	public int ballID { get; private set; } = 0;
+}
+
+/// <summary>
+/// 分数变化时
+/// </summary>
+public class MessageScoreChange : MessageBase<MessageScoreChange> {
+	public MessageScoreChange(int score, int previous, int delta) {
+		this.score = score;
+		this.previous = previous;
+		this.delta = delta;
+	}
+	public int score { get; private set; } = 0;
+	public int previous { get; private set; } = 0;
+	public int delta { get; private set; } = 0;
+}

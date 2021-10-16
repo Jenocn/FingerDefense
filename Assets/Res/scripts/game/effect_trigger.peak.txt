@@ -16,6 +16,7 @@ enum ElementType {
 	Racket, // 球拍
 	Edge, // 边缘
 	Bomb, // 炸弹
+	Snare, // 陷阱
 }
 
 // 砖块被击时

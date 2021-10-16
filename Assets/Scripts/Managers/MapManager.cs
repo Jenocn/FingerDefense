@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Managers {
     public class MapManager : ManagerBase<MapManager> {
-        private int _currentID = 0;
+        private int _currentID = 1;
         public int currentID { get => _currentID; }
 
         public void SetCurrentID(int id) {

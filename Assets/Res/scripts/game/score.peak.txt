@@ -1,0 +1,9 @@
+
+
+function calc_score(curScore, brickID, damage, bDie, hitCount) {
+	var ret = curScore;
+
+	ret += (damage * hitCount);
+
+	return ret;
+}

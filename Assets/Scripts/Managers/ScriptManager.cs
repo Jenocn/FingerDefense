@@ -14,7 +14,6 @@ namespace Game.Managers {
         private LogSystem.Logger _logger = null;
         private MessageDispatcher _messageDispatcher = new MessageDispatcher();
         private Dictionary<string, VirtualJourney> _cacheVJ = new Dictionary<string, VirtualJourney>();
-
         public MessageDispatcher message { get => _messageDispatcher; }
 
         public VirtualJourney Load(string filename) {
