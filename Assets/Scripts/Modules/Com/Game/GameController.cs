@@ -79,6 +79,8 @@ namespace Game.Modules {
 
         private void _InitGame() {
             _hitCount = 0;
+
+            _scoreManager.InitScore();
             
             var mapManager = ManagerCenter.GetManager<MapManager>();
             var element = TableMapdat.instance.GetElement(mapManager.currentID);
