@@ -51,13 +51,13 @@ namespace Game.Modules {
                 var unitID = other.GetComponent<UnitID>();
                 switch (unitID.elementType) {
                 case ID_ElementType.Brick:
-                    _OnTriggerBrick(other, unitID);
+                    _OnTriggerRect(other, unitID);
                     break;
                 case ID_ElementType.Racket:
                     _OnTriggerRacket(other, unitID);
                     break;
                 case ID_ElementType.Edge:
-                    _OnTriggerEdge(other, unitID);
+                    _OnTriggerRect(other, unitID);
                     break;
                 case ID_ElementType.Trap:
                     _OnTriggerTrap(other, unitID);
@@ -90,32 +90,21 @@ namespace Game.Modules {
             transform.Translate(Mathf.Cos(radain) * deltaPosN, Mathf.Sin(radain) * deltaPosN, 0);
         }
 
-        private void _OnTriggerEdge(Collider2D target, UnitID targetID) {
-            var unitEdge = target.GetComponent<UnitEdge>();
-            var dir = unitEdge.direction.normalized;
-            var l = Mathf.Abs(Vector2.Dot(_direction.normalized, dir));
-            var fdir = (_direction.normalized + dir * l * 2).normalized;
-            SetDirection(fdir);
-        }
-
         private void _OnTriggerTrap(Collider2D target, UnitID targetID) {
-            var unitEdge = target.GetComponent<UnitEdge>();
-            if (unitEdge) {
-                // temp 临时
-                _OnTriggerEdge(target, targetID);
-            }
+            // temp 临时
+            _OnTriggerRect(target, targetID);
             MessageCenter.Send(new MessageFallIntoTrap(_unitID.uniqueID));
         }
 
-        private void _OnTriggerBrick(Collider2D target, UnitID targetID) {
+        private void _OnTriggerRect(Collider2D target, UnitID targetID) {
             var targetHalfSize = new Vector2(target.bounds.size.x * 0.5f, target.bounds.size.y * 0.5f);
             Vector2 targetPos = target.transform.position;
 
             var point = target.ClosestPoint(transform.position);
-            var dxL = point.x - (targetPos.x - targetHalfSize.x);
-            var dxR = point.x - (targetPos.x + targetHalfSize.x);
-            var dxB = point.y - (targetPos.y - targetHalfSize.y);
-            var dxT = point.y - (targetPos.y + targetHalfSize.y);
+            var dxL = point.x - (targetPos.x - targetHalfSize.x + target.offset.x);
+            var dxR = point.x - (targetPos.x + targetHalfSize.x + target.offset.x);
+            var dxB = point.y - (targetPos.y - targetHalfSize.y + target.offset.y);
+            var dxT = point.y - (targetPos.y + targetHalfSize.y + target.offset.y);
 
             float[] tempArr = new float[] { Mathf.Abs(dxR), Mathf.Abs(dxB), Mathf.Abs(dxT) };
             // 0:left 1:right 2:bottom 3:top

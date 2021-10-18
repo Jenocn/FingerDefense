@@ -67,11 +67,13 @@ class GameApplication : MonoBehaviour {
 		// LogSystem init
 		LogSystem.Init();
 		LogSystem.RegisterDebugLog(this, (string condition, string stackTrace) => {
-			// temp todo...
 			if (Application.isEditor) {
 				System.IO.File.AppendAllText(PathTool.Join("user", "log.txt"), condition + "\n" + stackTrace);
+/*
+				// 非编辑器条件暂不生成文件
 			} else {
 				System.IO.File.AppendAllText(PathTool.Join(Application.persistentDataPath, "log.txt"), condition + "\n" + stackTrace);
+*/
 			}
 		});
 
