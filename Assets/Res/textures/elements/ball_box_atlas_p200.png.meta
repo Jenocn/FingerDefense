@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-guid: 7ee75f33f22af45cc80994d2c2432f73
+guid: b0fa11364ca18dc4f8990fd12a83d88d
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 7392728598337725938
-    second: ball_atlas_6x6_p200_0
-  - first:
-      213: -5463231447532522580
-    second: ball_atlas_p200_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -107,28 +101,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: ball_atlas_p200_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ca3b414a1f3be24b0800000000000000
-      internalID: -5463231447532522580
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
