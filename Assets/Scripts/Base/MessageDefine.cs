@@ -12,6 +12,20 @@ public class MessageGamePause : MessageBase<MessageGamePause> {
 }
 
 /// <summary>
+/// 球碰撞消息
+/// </summary>
+public class MessageBallCollision : MessageBase<MessageBallCollision> {
+	public MessageBallCollision(int ballID, Vector3 ballPosition, Vector3 collisionPosition) {
+		this.ballID = ballID;
+		this.ballPosition = ballPosition;
+		this.collisionPosition = collisionPosition;
+	}
+	public int ballID { get; private set; } = 0;
+	public Vector3 ballPosition { get; private set; } = Vector3.zero;
+	public Vector3 collisionPosition { get; private set; } = Vector3.zero;
+}
+
+/// <summary>
 /// 砖块被命中消息
 /// </summary>
 public class MessageBrickHit : MessageBase<MessageBrickHit> {

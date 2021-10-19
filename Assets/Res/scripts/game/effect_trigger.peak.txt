@@ -6,7 +6,8 @@ enum BrickType {
 
 enum EffectType {
 	BoomArea = 1, // 圆形范围炸弹
-	BrickDie = 2, // 砖块死亡特效
+	SmokeRun = 2, // 一溜烟特效
+	CollisionFire = 3, // 碰撞火花特效
 }
 
 enum ElementType {
@@ -19,6 +20,11 @@ enum ElementType {
 	Snare, // 陷阱
 }
 
+// 球发生碰撞
+function ball_collision(ballID, ballX, ballY, collisionX, collisionY) {
+	create_effect(EffectType.SmokeRun, collisionX, collisionY, 0);
+}
+
 // 砖块被击时
 function brick_hit(brickID, x, y, attackID, attackElementType) {
 }
@@ -28,5 +34,5 @@ function brick_die(brickID, x, y, attackID, attackElementType) {
 	if (brickID == BrickType.Bomb) {
 		create_effect(EffectType.BoomArea, x, y, 0.1);
 	}
-	create_effect(EffectType.BrickDie, x, y, 0);
+	create_effect(EffectType.CollisionFire, x, y, 0.08);
 }

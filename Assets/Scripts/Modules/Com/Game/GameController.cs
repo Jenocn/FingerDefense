@@ -26,6 +26,15 @@ namespace Game.Modules {
                 _CreateEffect(msg.effectID, msg.position, msg.delay);
             });
 
+            MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
+                _scriptManager.ExecuteWithCache("effect_trigger", "ball_collision",
+                    new ScriptValue(msg.ballID),
+                    new ScriptValue(msg.ballPosition.x),
+                    new ScriptValue(msg.ballPosition.y),
+                    new ScriptValue(msg.collisionPosition.x),
+                    new ScriptValue(msg.collisionPosition.y));
+            });
+
             MessageCenter.AddListener<MessageBrickHit>(this, (MessageBrickHit msg) => {
 
                 _scriptManager.ExecuteWithCache("effect_trigger", "brick_hit",
@@ -67,6 +76,7 @@ namespace Game.Modules {
             BrickCache.instance.Clear();
             EffectCache.instance.Clear();
 
+            MessageCenter.RemoveListener<MessageBallCollision>(this);
             MessageCenter.RemoveListener<MessageFallIntoTrap>(this);
             MessageCenter.RemoveListener<MessageRacketHit>(this);
             MessageCenter.RemoveListener<MessageBrickHit>(this);
@@ -85,7 +95,7 @@ namespace Game.Modules {
             _hitCount = 0;
 
             _scoreManager.InitScore();
-            
+
             var mapManager = ManagerCenter.GetManager<MapManager>();
             var element = TableMapdat.instance.GetElement(mapManager.currentID);
             if (element) {
@@ -95,7 +105,7 @@ namespace Game.Modules {
                 _CreateBall(Vector2.zero);
             }
         }
-        
+
         private void _CreateRacket(Vector2 pos) {
             _handleRackets.RemoveWhere((UnitRacket item) => {
                 if (item && item.gameObject.activeSelf) {

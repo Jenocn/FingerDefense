@@ -61,6 +61,9 @@ namespace Game.Modules {
                     _OnTriggerTrap(other, unitID);
                     break;
                 }
+
+                MessageCenter.Send(new MessageBallCollision(_unitID.uniqueID, transform.position, other.ClosestPoint(transform.position)));
+                
                 transform.position = Vector3.Lerp(transform.position, _prevPosition, 0.5f);
             });
         }
