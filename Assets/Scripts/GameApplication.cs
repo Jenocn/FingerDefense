@@ -102,6 +102,7 @@ class GameApplication : MonoBehaviour {
 			assetsLoadList.AddLast(new System.Tuple<string, string>("strings", PathTool.Join(Application.streamingAssetsPath, "assets", "strings.dat")));
 			// assetsLoadList.AddLast(new System.Tuple<string, string>("tables", PathTool.Join(Application.streamingAssetsPath, "assets", "tables.dat")));
 			assetsLoadList.AddLast(new System.Tuple<string, string>("textures", PathTool.Join(Application.streamingAssetsPath, "assets", "textures.dat")));
+			assetsLoadList.AddLast(new System.Tuple<string, string>("materials", PathTool.Join(Application.streamingAssetsPath, "assets", "materials.dat")));
 			assetsLoadList.AddLast(new System.Tuple<string, string>("scripts", PathTool.Join(Application.streamingAssetsPath, "assets", "scripts.dat")));
 			assetsLoadList.AddLast(new System.Tuple<string, string>("prefabs", PathTool.Join(Application.streamingAssetsPath, "assets", "prefabs.dat")));
 			assetsLoadList.AddLast(new System.Tuple<string, string>("scenes", PathTool.Join(Application.streamingAssetsPath, "assets", "scenes.dat")));
