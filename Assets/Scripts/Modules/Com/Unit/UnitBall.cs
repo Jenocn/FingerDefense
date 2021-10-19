@@ -14,8 +14,6 @@ namespace Game.Modules {
         [SerializeField]
         private Vector2 _direction = Vector2.zero;
 
-        private Vector2 _halfSize = Vector2.zero;
-        private BoxCollider2D _collider = null;
         private Vector3 _prevPosition = Vector3.zero;
 
         private UnitID _unitID = null;
@@ -71,12 +69,6 @@ namespace Game.Modules {
             _unitCollider.triggerNotify.RemoveListener(this);
         }
 
-        // Start is called before the first frame update
-        void Start() {
-            _collider = GetComponent<BoxCollider2D>();
-            _halfSize.Set(_collider.bounds.size.x * 0.5f, _collider.bounds.size.y * 0.5f);
-        }
-
         // Update is called once per frame
         void Update() {
             _prevPosition = transform.position;
@@ -101,6 +93,7 @@ namespace Game.Modules {
             Vector2 targetPos = target.transform.position;
 
             var point = target.ClosestPoint(transform.position);
+
             var dxL = point.x - (targetPos.x - targetHalfSize.x + target.offset.x);
             var dxR = point.x - (targetPos.x + targetHalfSize.x + target.offset.x);
             var dxB = point.y - (targetPos.y - targetHalfSize.y + target.offset.y);
@@ -118,36 +111,39 @@ namespace Game.Modules {
                 }
             }
 
+            var previous = _direction;
+
             switch (minTag) {
             case 0:
-                if (_direction.x > 0) {
-                    _direction.x *= -1;
-                } else {
+                _direction.x = -Mathf.Abs(_direction.x);
+                if (GCL.Base.Utility.PositiveNegativeNumber(previous.x) ==
+                    GCL.Base.Utility.PositiveNegativeNumber(_direction.x)) {
                     _direction.y *= -1;
                 }
                 break;
             case 1:
-                if (_direction.x < 0) {
-                    _direction.x *= -1;
-                } else {
+                _direction.x = Mathf.Abs(_direction.x);
+                if (GCL.Base.Utility.PositiveNegativeNumber(previous.x) ==
+                    GCL.Base.Utility.PositiveNegativeNumber(_direction.x)) {
                     _direction.y *= -1;
                 }
                 break;
             case 2:
-                if (_direction.y > 0) {
-                    _direction.y *= -1;
-                } else {
+                _direction.y = -Mathf.Abs(_direction.y);
+                if (GCL.Base.Utility.PositiveNegativeNumber(previous.y) ==
+                    GCL.Base.Utility.PositiveNegativeNumber(_direction.y)) {
                     _direction.x *= -1;
                 }
                 break;
             case 3:
-                if (_direction.y < 0) {
-                    _direction.y *= -1;
-                } else {
+                _direction.y = Mathf.Abs(_direction.y);
+                if (GCL.Base.Utility.PositiveNegativeNumber(previous.y) ==
+                    GCL.Base.Utility.PositiveNegativeNumber(_direction.y)) {
                     _direction.x *= -1;
                 }
                 break;
             }
+
         }
         private void _OnTriggerRacket(Collider2D target, UnitID targetID) {
             var unitRacket = target.GetComponent<UnitRacket>();
