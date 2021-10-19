@@ -55,7 +55,7 @@ namespace Game.Modules {
 
                 ++_hitCount;
 
-                Time.timeScale = 1 - Mathf.Clamp((_hitCount - 2) * 0.03f, 0, 0.6f);
+                Time.timeScale = 1 - Mathf.Clamp((_hitCount - 2) * 0.02f, 0, 0.3f);
 
                 _scoreManager.AddScore(msg.uniqueID, msg.damageResult, _hitCount);
             });
