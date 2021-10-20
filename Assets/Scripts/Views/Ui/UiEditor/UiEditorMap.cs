@@ -178,6 +178,7 @@ namespace Game.Views {
                 data.index = item.index;
                 data.id = item.id;
                 data.position = item.position;
+                data.hpMax = item.hpMax;
                 data.handleObject = BrickFactory.Create(data.id, data.hpMax, data.position, null)?.gameObject;
                 _dataMap.Add(data.index, data);
             }
