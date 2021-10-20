@@ -5,6 +5,11 @@ enum BrickType {
 	BrickGreen = 2,
 	BrickBlue = 3,
 	Bomb = 4,
+	Spawn = 5,
+}
+
+enum BallType {
+	Default = 1,
 }
 
 enum EffectType {
@@ -46,5 +51,8 @@ function brick_die(brickID, x, y, attackID, attackElementType) {
 	} else if (brickID == BrickType.Bomb) {
 		create_effect(EffectType.BoomArea, x, y, 0.1);
 		create_effect(EffectType.CollisionFireOrange, x, y, 0.08);
+	} else if (brickID == BrickType.Spawn) {
+		create_ball(BallType.Default, x, y, 1, 1, 10, 0.1);
+		create_ball(BallType.Default, x, y, -1, 1, 10, 0.1);
 	}
 }

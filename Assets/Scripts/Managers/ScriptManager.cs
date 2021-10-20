@@ -113,7 +113,7 @@ namespace Game.Managers {
         private void _InitUnityModule() {
             var space = new peak.interpreter.Space(peak.interpreter.SpaceType.None);
             var module = new peak.interpreter.Module("Unity", space);
-            VirtualMachine.modulePool.AddModule("Unity", module, false);
+            VirtualMachine.modulePool.AddModule("Unity", module);
         }
         private void _InitGameModule() {
             var module = new peak.interpreter.Module("Game", new peak.interpreter.Space(peak.interpreter.SpaceType.None));
@@ -161,8 +161,32 @@ namespace Game.Managers {
                     return ValueNull.DEFAULT_VALUE;
                 })
             ));
+            // create_ball
+            module.space.AddVariable(new peak.interpreter.Variable("create_ball", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(7, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    var msg = new PeakMessage_CreateBall();
+                    if (ValueTool.IsInteger(args[0])) {
+                        msg.ballID = (int) ((ValueNumber) args[0]).value;
+                    }
+                    if (ValueTool.IsNumber(args[1]) && ValueTool.IsNumber(args[2])) {
+                        msg.position.Set((float) ((ValueNumber) args[1]).value, (float) ((ValueNumber) args[2]).value);
+                    }
+                    if (ValueTool.IsNumber(args[3]) && ValueTool.IsNumber(args[4])) {
+                        msg.direction.Set((float) ((ValueNumber) args[3]).value, (float) ((ValueNumber) args[4]).value);
+                    }
+                    if (ValueTool.IsNumber(args[5])) {
+                        msg.duration = (float) ((ValueNumber) args[5]).value;
+                    }
+                    if (ValueTool.IsNumber(args[6])) {
+                        msg.delay = (float)((ValueNumber)args[6]).value;
+                    }
+                    message.Send(msg);
 
-            VirtualMachine.modulePool.AddModule("Game", module, false);
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+
+            VirtualMachine.modulePool.AddModule("Game", module);
         }
     }
 

@@ -37,9 +37,13 @@ namespace Game.Modules {
             foreach (var item in _removeList) {
                 _destroyListeners.Remove(item);
             }
+
             foreach (var item in _destroyListeners) {
                 item.Value.Invoke(type);
             }
+            
+            _destroyListeners.Clear();
+
             if (_actionDestroy != null) {
                 _actionDestroy.Invoke(type);
             } else {
