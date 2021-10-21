@@ -47,6 +47,3 @@ TagManager:
   - name: Ball
     uniqueID: 2888614683
     locked: 0
-  - name: Tip
-    uniqueID: 2848881949
-    locked: 0

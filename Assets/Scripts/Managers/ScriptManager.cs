@@ -163,7 +163,7 @@ namespace Game.Managers {
             ));
             // create_ball
             module.space.AddVariable(new peak.interpreter.Variable("create_ball", peak.interpreter.VariableAttribute.Const,
-                new peak.interpreter.ValueFunction(7, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                new peak.interpreter.ValueFunction(6, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
                     var msg = new PeakMessage_CreateBall();
                     if (ValueTool.IsInteger(args[0])) {
                         msg.ballID = (int) ((ValueNumber) args[0]).value;
@@ -175,10 +175,7 @@ namespace Game.Managers {
                         msg.direction.Set((float) ((ValueNumber) args[3]).value, (float) ((ValueNumber) args[4]).value);
                     }
                     if (ValueTool.IsNumber(args[5])) {
-                        msg.duration = (float) ((ValueNumber) args[5]).value;
-                    }
-                    if (ValueTool.IsNumber(args[6])) {
-                        msg.delay = (float)((ValueNumber)args[6]).value;
+                        msg.delay = (float)((ValueNumber)args[5]).value;
                     }
                     message.Send(msg);
 

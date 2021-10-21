@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Game.Modules {
     [RequireComponent(typeof(UnitID))]
+    [RequireComponent(typeof(UnitDestroy))]
     [RequireComponent(typeof(UnitTriggerMain))]
     public class UnitBall : MonoBehaviour {
 
@@ -18,6 +19,7 @@ namespace Game.Modules {
 
         private UnitID _unitID = null;
         private UnitTriggerMain _unitCollider = null;
+        private UnitDestroy _unitDestroy = null;
 
         private static List<System.Tuple<float, Vector2>> _dirList = new List<System.Tuple<float, Vector2>>() {
             new System.Tuple<float, Vector2>(0.393f, new Vector2(0.92f, 0.38f)), // 22.5
@@ -44,6 +46,7 @@ namespace Game.Modules {
         private void Awake() {
             _unitID = GetComponent<UnitID>();
             _unitCollider = GetComponent<UnitTriggerMain>();
+            _unitDestroy = GetComponent<UnitDestroy>();
 
             _unitCollider.triggerNotify.AddListener(this, (Collider2D other) => {
                 var unitID = other.GetComponent<UnitID>();
@@ -63,7 +66,7 @@ namespace Game.Modules {
                 }
 
                 MessageCenter.Send(new MessageBallCollision(_unitID.uniqueID, transform.position, other.ClosestPoint(transform.position)));
-                
+
                 transform.position = Vector3.Lerp(transform.position, _prevPosition, 0.5f);
             });
         }
@@ -86,9 +89,8 @@ namespace Game.Modules {
         }
 
         private void _OnTriggerTrap(Collider2D target, UnitID targetID) {
-            // temp 临时
-            _OnTriggerRect(target, targetID);
             MessageCenter.Send(new MessageFallIntoTrap(_unitID.uniqueID));
+            _unitDestroy.InvokeDestroy(DestroyType.None);
         }
 
         private void _OnTriggerRect(Collider2D target, UnitID targetID) {

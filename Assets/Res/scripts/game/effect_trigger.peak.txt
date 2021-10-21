@@ -52,7 +52,7 @@ function brick_die(brickID, x, y, attackID, attackElementType) {
 		create_effect(EffectType.BoomArea, x, y, 0.1);
 		create_effect(EffectType.CollisionFireOrange, x, y, 0.08);
 	} else if (brickID == BrickType.Spawn) {
-		create_ball(BallType.Default, x, y, 1, 1, 10, 0.1);
-		create_ball(BallType.Default, x, y, -1, 1, 10, 0.1);
+		create_ball(BallType.Default, x, y, 1, 1, 0.1);
+		create_ball(BallType.Default, x, y, -1, 1, 0.1);
 	}
 }

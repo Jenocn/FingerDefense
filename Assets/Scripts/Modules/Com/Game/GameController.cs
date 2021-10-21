@@ -28,7 +28,7 @@ namespace Game.Modules {
                 _CreateEffect(msg.effectID, msg.position, msg.delay);
             });
             _scriptManager.message.AddListener<PeakMessage_CreateBall>(this, (PeakMessage_CreateBall msg) => {
-                _CreateBall(msg.ballID, msg.position, msg.direction, true, msg.duration, msg.delay);
+                _CreateBall(msg.ballID, msg.position, msg.direction, msg.delay);
             });
 
             MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
@@ -108,7 +108,7 @@ namespace Game.Modules {
                 foreach (var item in element.items) {
                     _CreateBrick(item.id, item.hpMax, item.position);
                 }
-                _CreateBall(1, Vector2.zero, Vector2.one, false, 0, 1);
+                _CreateBall(1, Vector2.zero, Vector2.one, 1);
             }
         }
 
@@ -122,16 +122,13 @@ namespace Game.Modules {
             _currentRacket = RacketFactory.Create(1, pos, _gameNode);
             _handleRackets.Add(_currentRacket);
         }
-        private void _CreateBall(int ballID, Vector2 pos, Vector2 direction, bool bDelayDestroy, float duration, float delay) {
+        private void _CreateBall(int ballID, Vector2 pos, Vector2 direction, float delay) {
             _ExecuteWithStartCoroutine(delay, () => {
                 var ball = BallFactory.Create(ballID, pos, _gameNode, direction);
                 var unitDestroy = ball.GetComponent<UnitDestroy>();
                 unitDestroy.AddDestroyListener(this, (DestroyType dt) => {
                     _unitBallList.Remove(ball);
                 });
-                if (bDelayDestroy) {
-                    unitDestroy.InvokeDestroy(DestroyType.None, duration);
-                }
                 _unitBallList.Add(ball);
             });
         }
