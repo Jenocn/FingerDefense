@@ -95,20 +95,21 @@ class GameApplication : MonoBehaviour {
 		AssetSystem.SetRootPath(PathTool.Join(Application.streamingAssetsPath, "assets"));
 		AssetSystem.SetExtname(".dat");
 
-		var assetsLoadList = new LinkedList<System.Tuple<string, string>>();
+		var assetsLoadList = new LinkedList<string>();
 		if (!Application.isEditor || AssetSystem.IsEditorUseAssetBundle) {
-			// assetsLoadList.AddLast(new System.Tuple<string, string>("common", PathTool.Join(Application.streamingAssetsPath, "assets", "common.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("fonts", PathTool.Join(Application.streamingAssetsPath, "assets", "fonts.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("strings", PathTool.Join(Application.streamingAssetsPath, "assets", "strings.dat")));
-			// assetsLoadList.AddLast(new System.Tuple<string, string>("tables", PathTool.Join(Application.streamingAssetsPath, "assets", "tables.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("textures", PathTool.Join(Application.streamingAssetsPath, "assets", "textures.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("materials", PathTool.Join(Application.streamingAssetsPath, "assets", "materials.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("scripts", PathTool.Join(Application.streamingAssetsPath, "assets", "scripts.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("prefabs", PathTool.Join(Application.streamingAssetsPath, "assets", "prefabs.dat")));
-			assetsLoadList.AddLast(new System.Tuple<string, string>("scenes", PathTool.Join(Application.streamingAssetsPath, "assets", "scenes.dat")));
+			// assetsLoadList.AddLast("common");
+			// assetsLoadList.AddLast("tables");
+			assetsLoadList.AddLast("fonts");
+			assetsLoadList.AddLast("strings");
+			assetsLoadList.AddLast("textures");
+			assetsLoadList.AddLast("tiles");
+			assetsLoadList.AddLast("materials");
+			assetsLoadList.AddLast("scripts");
+			assetsLoadList.AddLast("prefabs");
+			assetsLoadList.AddLast("scenes");
 
 			foreach (var item in assetsLoadList) {
-				AssetSystem.Preload(item.Item1);
+				AssetSystem.Preload(item);
 			}
 		}
 

@@ -66,12 +66,16 @@ namespace Game.Modules {
             });
 
             MessageCenter.AddListener<MessageRacketHit>(this, (MessageRacketHit msg) => {
-                _hitCount = 0;
-                Time.timeScale = 1;
+                if (_unitBallList.Count <= 1) {
+                    _hitCount = 0;
+                    Time.timeScale = 1;
+                }
             });
             MessageCenter.AddListener<MessageFallIntoTrap>(this, (MessageFallIntoTrap msg) => {
-                _hitCount = 0;
-                Time.timeScale = 1;
+                if (_unitBallList.Count <= 1) {
+                    _hitCount = 0;
+                    Time.timeScale = 1;
+                }
             });
         }
 
