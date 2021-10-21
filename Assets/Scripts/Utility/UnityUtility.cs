@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game.Utility {
 	public static class UnityUtility {
@@ -30,7 +31,7 @@ namespace Game.Utility {
 		public static void DrawLine(Vector3 pos0, Vector3 pos1, Color color, Material material = null) {
 			var useMaterial = (material ? material : GetDefaultMaterial());
 			useMaterial.SetPass(0);
-				
+
 			GL.PushMatrix();
 			GL.Begin(GL.LINES);
 			GL.Color(color);
@@ -38,6 +39,25 @@ namespace Game.Utility {
 			GL.Vertex(pos1);
 			GL.End();
 			GL.PopMatrix();
+		}
+
+		public static void ChangeVisible(Transform target, bool bShow, bool bChildren) {
+			var renderer = target.GetComponents<Renderer>();
+			foreach (var item in renderer) {
+				item.enabled = bShow;
+			}
+
+			var uiBehaviour = target.GetComponents<UIBehaviour>();
+			foreach (var item in uiBehaviour) {
+				item.enabled = bShow;
+			}
+
+			if (bChildren) {
+				for (int i = 0; i < target.childCount; ++i) {
+					var child = target.GetChild(i);
+					ChangeVisible(child, bShow, bChildren);
+				}
+			}
 		}
 	}
 }

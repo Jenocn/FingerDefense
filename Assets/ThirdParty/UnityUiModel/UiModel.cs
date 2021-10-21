@@ -61,6 +61,12 @@ namespace UnityUiModel {
 		public void StartDelayAction(float second, System.Action action) {
 			StartCoroutine(_Wait(second, action));
 		}
+
+		protected GameObject InstantiateUI(GameObject prefab) {
+			var obj = Instantiate(prefab, transform);
+			obj.transform.localPosition = Vector3.zero;
+			return obj;
+		}
 		#endregion
 
 		#region "Don't call it manually"

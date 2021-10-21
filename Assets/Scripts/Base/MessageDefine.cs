@@ -81,3 +81,9 @@ public class MessageScoreChange : MessageBase<MessageScoreChange> {
 	public int previous { get; private set; } = 0;
 	public int delta { get; private set; } = 0;
 }
+
+/// <summary>
+/// 游戏失败
+/// </summary>
+public class MessageGameFailed : MessageBase<MessageGameFailed> {
+}

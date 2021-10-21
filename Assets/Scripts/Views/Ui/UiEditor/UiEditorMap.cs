@@ -37,7 +37,8 @@ namespace Game.Views {
         public override void OnInitUI() {
             var prefab = AssetSystem.Load<GameObject>("prefabs", "UiEditorMap");
             if (prefab) {
-                var ui = Instantiate(prefab, transform).transform;
+                var ui = InstantiateUI(prefab).transform;
+
                 ui.Find("ButtonOpen")?.GetComponent<Button>().onClick.AddListener(() => {
                     _LoadFromFile(_inputFilename.text);
                 });

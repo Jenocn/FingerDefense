@@ -15,7 +15,7 @@ namespace Game.Views {
             if (!prefab) {
                 return;
             }
-            var ui = Instantiate(prefab, transform).transform;
+            var ui = InstantiateUI(prefab).transform;
             var top = ui.Find("Top");
             if (top) {
                 var buttonPause = top.Find("ButtonPause")?.GetComponent<StateButton>();

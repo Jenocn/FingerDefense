@@ -75,6 +75,8 @@ namespace Game.Modules {
                 if (_unitBallList.Count <= 1) {
                     _hitCount = 0;
                     Time.timeScale = 1;
+
+                    MessageCenter.Send(new MessageGameFailed());
                 }
             });
         }
