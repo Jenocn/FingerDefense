@@ -97,7 +97,11 @@ namespace Game.Modules {
 
         private void Start() {
             _gameTouch = GetComponent<GameTouch>();
-            _gameTouch.SetTouchBeginAction(_CreateRacket);
+            _gameTouch.SetTouchBeginAction((Vector2 pos) => {
+                if (_unitBallList.Count > 0) {
+                    _CreateRacket(pos);
+                }
+            });
             _gameTouch.SetTouchDeltaAction(_SetRacketDirection);
 
             _InitGame();
