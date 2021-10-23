@@ -122,7 +122,7 @@ namespace Game.Managers {
             InputSystem.AddAxisBind("HorizontalVIEW", "VerticalVIEW", (int) AxisID.Right);
             InputSystem.AddAxisBind("AxisLRT", "AxisLRT", (int) AxisID.LRT);
 
-            var configStr = ArchiveSystem.common.GetString(this, "input_binds", "");
+            var configStr = ArchiveSystem.common.GetString("InputManager", "input_binds", "");
             if (string.IsNullOrEmpty(configStr)) {
                 RebindDefault();
             } else {
@@ -156,7 +156,7 @@ namespace Game.Managers {
                 configReader.Set("event", "cmd_" + enumName, item.Value);
             }
             var saveData = GCL.Serialization.INITool.ToString(configReader);
-            ArchiveSystem.common.SetString(this, "input_binds", saveData);
+            ArchiveSystem.common.SetString("InputManager", "input_binds", saveData);
         }
     }
 }

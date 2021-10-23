@@ -32,7 +32,7 @@ namespace Game.Modules {
             });
 
             MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
-                _scriptManager.ExecuteWithCache("effect_trigger", "ball_collision",
+                _scriptManager.ExecuteWithCache("trigger", "ball_collision",
                     new ScriptValue(msg.ballID),
                     new ScriptValue(msg.ballPosition.x),
                     new ScriptValue(msg.ballPosition.y),
@@ -42,7 +42,7 @@ namespace Game.Modules {
 
             MessageCenter.AddListener<MessageBrickHit>(this, (MessageBrickHit msg) => {
 
-                _scriptManager.ExecuteWithCache("effect_trigger", "brick_hit",
+                _scriptManager.ExecuteWithCache("trigger", "brick_hit",
                     new ScriptValue(msg.uniqueID),
                     new ScriptValue(msg.position.x),
                     new ScriptValue(msg.position.y),
@@ -50,7 +50,7 @@ namespace Game.Modules {
                     new ScriptValue((int) msg.attackElementType));
 
                 if (msg.damageResult.bDie) {
-                    _scriptManager.ExecuteWithCache("effect_trigger", "brick_die",
+                    _scriptManager.ExecuteWithCache("trigger", "brick_die",
                         new ScriptValue(msg.uniqueID),
                         new ScriptValue(msg.position.x),
                         new ScriptValue(msg.position.y),
@@ -120,6 +120,9 @@ namespace Game.Modules {
                 }
                 _CreateBall(1, Vector2.zero, Vector2.one, 1);
             }
+
+            _scriptManager.ExecuteWithCache("trigger", "battle_start",
+                new ScriptValue(mapManager.currentID));
         }
 
         private void _CreateRacket(Vector2 pos) {

@@ -7,7 +7,10 @@ using UnityUiModel;
 namespace Game.Views {
     public class SceneHome : MonoBehaviour {
         private UiStack _uiStack = null;
+        private ScriptManager _scriptManager = null;
         void Start() {
+            _scriptManager = ManagerCenter.GetManager<ScriptManager>();
+
             _uiStack = GetComponent<UiStack>();
             _uiStack.PushUI<UiStart>();
 
@@ -20,6 +23,8 @@ namespace Game.Views {
             MessageCenter.AddListener<UiMessage_OnButtonChallengeMode>(this, (UiMessage_OnButtonChallengeMode msg) => {
                 GotoNormalGame(1);
             });
+
+            _scriptManager.ExecuteWithCache("trigger", "home_loaded");
         }
 
         private void OnDestroy() {

@@ -175,10 +175,63 @@ namespace Game.Managers {
                         msg.direction.Set((float) ((ValueNumber) args[3]).value, (float) ((ValueNumber) args[4]).value);
                     }
                     if (ValueTool.IsNumber(args[5])) {
-                        msg.delay = (float)((ValueNumber)args[5]).value;
+                        msg.delay = (float) ((ValueNumber) args[5]).value;
                     }
                     message.Send(msg);
 
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            // music
+            module.space.AddVariable(new peak.interpreter.Variable("music", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(4, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    var channelType = MusicChannelType.BGM;
+                    string audioName = "";
+                    float volume = 1.0f;
+                    bool bLoop = true;
+                    if (ValueTool.IsInteger(args[0])) {
+                        channelType = (MusicChannelType) ((ValueNumber) args[0]).value;
+                    }
+                    if (ValueTool.IsString(args[1])) {
+                        audioName = args[1].ToString();
+                    }
+                    if (ValueTool.IsNumber(args[2])) {
+                        volume = (float) ((ValueNumber) args[2]).value;
+                    }
+                    if (ValueTool.IsBool(args[3])) {
+                        bLoop = ((ValueBool) args[3]).value;
+                    }
+                    MessageCenter.Send(new MessageMusicPlay(channelType, audioName, volume, bLoop));
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            // music_control
+            module.space.AddVariable(new peak.interpreter.Variable("music_control", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(2, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    var channelType = MusicChannelType.BGM;
+                    var controlType = AudioControlType.None;
+                    if (ValueTool.IsInteger(args[0])) {
+                        channelType = (MusicChannelType) ((ValueNumber) args[0]).value;
+                    }
+                    if (ValueTool.IsInteger(args[1])) {
+                        controlType = (AudioControlType) ((ValueNumber) args[1]).value;
+                    }
+                    MessageCenter.Send(new MessageMusicControl(channelType, controlType));
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            // sound_effect
+            module.space.AddVariable(new peak.interpreter.Variable("sound_effect", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(2, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    string audioName = "";
+                    float volume = 1;
+                    if (ValueTool.IsString(args[0])) {
+                        audioName = args[0].ToString();
+                    }
+                    if (ValueTool.IsNumber(args[1])) {
+                        volume = (float) ((ValueNumber) args[1]).value;
+                    }
+                    MessageCenter.Send(new MessageSoundEffect(audioName, volume));
                     return ValueNull.DEFAULT_VALUE;
                 })
             ));

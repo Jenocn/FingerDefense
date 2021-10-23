@@ -1,0 +1,137 @@
+/******************************************************
+"Game"内置方法:
+---------------------------------------------
+	播放音乐: 
+		channelType: 音轨类型
+		audioName: 音乐名称
+		volumePercent: 音量百分比(0 ~ 1.0)
+		bLoop: 是否循环
+	music(channelType, audioName, volumePercent, bLoop);
+---------------------------------------------
+	音乐控制:
+		channelType: 音轨类型
+		audioControl: 控制类型
+	music_control(channelType, audioControl);
+---------------------------------------------
+	播放音效:
+		audioName: 音效名称
+		volumePercent: 音量百分比(0 ~ 1.0)
+	sound_effect(audioName, volumePercent);
+---------------------------------------------
+	创建球:
+		ballID: 球ID
+		posX: 坐标X
+		posY: 坐标Y
+		dirX: 方向X
+		dirY: 方向Y
+		delay: 创建延迟
+	create_ball(ballID, posX, posY, dirX, dirY, delay);
+---------------------------------------------
+	创建效果:
+		effectID: 效果ID
+		posX: 坐标X
+		posY: 坐标Y
+		delay: 创建延迟
+	create_effect(effectID, posX, posY, delay);
+******************************************************/
+
+import "Game";
+
+//========================================
+// 枚举定义
+//========================================
+
+enum BrickType {
+	BrickRed = 1,
+	BrickGreen = 2,
+	BrickBlue = 3,
+	Bomb = 4,
+	Spawn = 5,
+}
+
+enum BallType {
+	Default = 1,
+}
+
+enum EffectType {
+	BoomArea = 1, // 圆形范围炸弹
+	SmokeRun = 2, // 一溜烟特效
+	CollisionFireRed = 3, // 碰撞火花特效(红色)
+	CollisionFireGreen = 4, // 碰撞火花特效(绿色)
+	CollisionFireBlue = 5, // 碰撞火花特效(蓝色)
+	CollisionFireOrange = 6, // 碰撞火花特效(橙色)
+	CollisionFireYellowGreen = 7, // 碰撞火花特效(黄绿色)
+}
+
+enum ElementType {
+	None = 0,
+	Ball, // 球
+	Brick, // 砖块
+	Racket, // 球拍
+	Edge, // 边缘
+	Bomb, // 炸弹
+	Snare, // 陷阱
+}
+
+// 音频控制类型
+enum AudioControl {
+    None = 0,
+    Play, // 播放
+    Pause, // 暂停
+	UnPause, // 继续
+    Replay, // 重播
+    Stop, // 停止
+}
+
+// 背景音乐音轨
+enum MusicChannelType {
+	BGM = 0,
+    Side1,
+    Side2,
+    Side3,
+}
+
+//========================================
+// 函数定义
+//========================================
+
+//========================================
+// 回调
+//========================================
+
+// 首页加载完成
+function home_loaded() {
+	music(MusicChannelType.BGM, "music_battle_001", 0.5, true);
+}
+
+// 战斗开始
+function battle_start(mapID) {
+	music(MusicChannelType.BGM, "music_battle_001", 0.5, true);
+}
+
+// 球发生碰撞
+function ball_collision(ballID, ballX, ballY, collisionX, collisionY) {
+	create_effect(EffectType.SmokeRun, collisionX, collisionY, 0);
+}
+
+// 砖块被击时
+function brick_hit(brickID, x, y, attackID, attackElementType) {
+}
+
+// 砖块死亡时
+function brick_die(brickID, x, y, attackID, attackElementType) {
+	if (brickID == BrickType.BrickRed) {
+		create_effect(EffectType.CollisionFireRed, x, y, 0.08);
+	} else if (brickID == BrickType.BrickGreen) {
+		create_effect(EffectType.CollisionFireGreen, x, y, 0.08);
+	} else if (brickID == BrickType.BrickBlue) {
+		create_effect(EffectType.CollisionFireBlue, x, y, 0.08);
+	} else if (brickID == BrickType.Bomb) {
+		create_effect(EffectType.BoomArea, x, y, 0.1);
+		create_effect(EffectType.CollisionFireOrange, x, y, 0.08);
+	} else if (brickID == BrickType.Spawn) {
+		create_ball(BallType.Default, x, y, 1, 1, 0.1);
+		create_ball(BallType.Default, x, y, -1, 1, 0.1);
+		create_effect(EffectType.CollisionFireYellowGreen, x, y, 0.08);
+	}
+}

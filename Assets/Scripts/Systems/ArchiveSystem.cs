@@ -17,6 +17,8 @@ namespace Game.Systems {
 		private static Dictionary<string, Archive> _archives = new Dictionary<string, Archive>();
 		private static Archive _current = null;
 		private static Archive _common = null;
+		private static bool _bEncodeKey = true;
+		private static bool _bEncodeSrc = true;
 
 		public static Archive common {
 			get {
@@ -36,6 +38,16 @@ namespace Game.Systems {
 		public static void Init(string rootPath, string extname) {
 			_rootPath = rootPath;
 			_extname = extname;
+		}
+
+		/// <summary>
+		/// 是否加密
+		/// </summary>
+		/// <param name="bKey">是否加密Key</param>
+		/// <param name="bSrc">是否加密整个存档文本</param>
+		public static void SetEncodeEnabled(bool bKey, bool bSrc) {
+			_bEncodeKey = bKey;
+			_bEncodeSrc = bSrc;
 		}
 
 		/// <summary>
@@ -104,6 +116,39 @@ namespace Game.Systems {
 			return GetArchive(_commonName);
 		}
 
+		private static string _EncodeSession(string session) {
+			if (_bEncodeKey) {
+				return EncryptTool.ToMD5(session);
+			} else {
+				return session;
+			}
+		}
+		private static string _EncodeKey<T>(string key) {
+			if (_bEncodeKey) {
+				return EncryptTool.ToMD5(typeof(T).Name + key);
+			} else {
+				return typeof(T).Name + "_" + key;
+			}
+		}
+		private static string SIGN_ENCODE = "_E_N_C_O_D_E_";
+		private static string _EncodeSrc(string src) {
+			if (_bEncodeSrc) {
+				return SIGN_ENCODE + EncryptTool.EncodeB64R(src);
+			} else {
+				return src;
+			}
+		}
+		private static string _DecodeSrc(string src) {
+			if (src.Length >= SIGN_ENCODE.Length) {
+				var head = src.Substring(0, SIGN_ENCODE.Length);
+				if (head == SIGN_ENCODE) {
+					src = src.Substring(SIGN_ENCODE.Length);
+					return EncryptTool.DecodeB64R(src);
+				}
+			}
+			return src;
+		}
+
 		public class Archive {
 			public static implicit operator bool(Archive value) {
 				return value != null;
@@ -120,57 +165,57 @@ namespace Game.Systems {
 				_name = name;
 			}
 
-			public void SetInt(object sender, string key, int value) {
-				_Set<int>(sender, key, value);
+			public void SetInt(string session, string key, int value) {
+				_Set<int>(session, key, value);
 			}
-			public int GetInt(object sender, string key, int def) {
-				return Convert.ToInt32(_Get<int>(sender, key, def));
-			}
-
-			public void SetFloat(object sender, string key, float value) {
-				_Set<float>(sender, key, value);
-			}
-			public float GetFloat(object sender, string key, float def) {
-				return Convert.ToSingle(_Get<float>(sender, key, def));
+			public int GetInt(string session, string key, int def) {
+				return Convert.ToInt32(_Get<int>(session, key, def));
 			}
 
-			public void SetDouble(object sender, string key, double value) {
-				_Set<double>(sender, key, value);
+			public void SetFloat(string session, string key, float value) {
+				_Set<float>(session, key, value);
 			}
-			public double GetDouble(object sender, string key, double def) {
-				return Convert.ToDouble(_Get<double>(sender, key, def));
-			}
-
-			public void SetLong(object sender, string key, long value) {
-				_Set<long>(sender, key, value);
-			}
-			public long GetLong(object sender, string key, long def) {
-				return Convert.ToInt64(_Get<long>(sender, key, def));
+			public float GetFloat(string session, string key, float def) {
+				return Convert.ToSingle(_Get<float>(session, key, def));
 			}
 
-			public void SetBool(object sender, string key, bool value) {
-				_Set<bool>(sender, key, value);
+			public void SetDouble(string session, string key, double value) {
+				_Set<double>(session, key, value);
 			}
-			public bool Getbool(object sender, string key, bool def) {
-				return Convert.ToBoolean(_Get<bool>(sender, key, def));
+			public double GetDouble(string session, string key, double def) {
+				return Convert.ToDouble(_Get<double>(session, key, def));
 			}
 
-			public void SetString(object sender, string key, string value) {
-				_Set<string>(sender, key, value);
+			public void SetLong(string session, string key, long value) {
+				_Set<long>(session, key, value);
 			}
-			public string GetString(object sender, string key, string def) {
-				return Convert.ToString(_Get<string>(sender, key, def));
+			public long GetLong(string session, string key, long def) {
+				return Convert.ToInt64(_Get<long>(session, key, def));
+			}
+
+			public void SetBool(string session, string key, bool value) {
+				_Set<bool>(session, key, value);
+			}
+			public bool GetBool(string session, string key, bool def) {
+				return Convert.ToBoolean(_Get<bool>(session, key, def));
+			}
+
+			public void SetString(string session, string key, string value) {
+				_Set<string>(session, key, value);
+			}
+			public string GetString(string session, string key, string def) {
+				return Convert.ToString(_Get<string>(session, key, def));
 			}
 
 			public void Load() {
 				var filename = PathTool.Join(ArchiveSystem.GetRootPath(), Name + ArchiveSystem.GetExtname());
 				if (File.Exists(filename)) {
 					var data = File.ReadAllText(filename, System.Text.Encoding.UTF8);
-					LoadData(data);
+					ReadData(data);
 				}
 			}
 			public void Save() {
-				SaveData(GetData());
+				WriteData(_data);
 			}
 			public void Delete() {
 				var filename = PathTool.Join(ArchiveSystem.GetRootPath(), Name + ArchiveSystem.GetExtname());
@@ -179,49 +224,37 @@ namespace Game.Systems {
 				}
 			}
 
-			public void SaveData(string data) {
+			public void WriteData(Dictionary<string, Dictionary<string, object>> data) {
+				var src = _EncodeSrc(JSONTool.ToString(data));
 				var path = ArchiveSystem.GetRootPath();
 				if (!Directory.Exists(path)) {
 					Directory.CreateDirectory(path);
 				}
 				var filename = PathTool.Join(path, Name + ArchiveSystem.GetExtname());
-				File.WriteAllText(filename, data, System.Text.Encoding.UTF8);
+				File.WriteAllText(filename, src, System.Text.Encoding.UTF8);
 			}
-			public void LoadData(string data) {
+			public void ReadData(string data) {
 				_data = JSONTool.ParseToCustomKV<string, Dictionary<string, object>>(_DecodeSrc(data));
 			}
-			public string GetData() {
-				return _EncodeSrc(JSONTool.ToString(_data));
+			public Dictionary<string, Dictionary<string, object>> GetData() {
+				return _data;
 			}
 
-			private void _Set<T>(object sender, string key, object value) {
-				var enSender = _ToSender(sender);
-				if (!_data.TryGetValue(enSender, out var tempDict)) {
+			private void _Set<T>(string session, string key, object value) {
+				var enSession = _EncodeSession(session);
+				if (!_data.TryGetValue(enSession, out var tempDict)) {
 					tempDict = new Dictionary<string, object>();
-					_data.Add(enSender, tempDict);
+					_data.Add(enSession, tempDict);
 				}
-				_data[enSender][_ToKey<T>(key)] = value;
+				_data[enSession][_EncodeKey<T>(key)] = value;
 			}
-			private object _Get<T>(object sender, string key, object def) {
-				if (_data.TryGetValue(_ToSender(sender), out var tempDict)) {
-					if (tempDict.TryGetValue(_ToKey<T>(key), out var ret)) {
+			private object _Get<T>(string session, string key, object def) {
+				if (_data.TryGetValue(_EncodeSession(session), out var tempDict)) {
+					if (tempDict.TryGetValue(_EncodeKey<T>(key), out var ret)) {
 						return ret;
 					}
 				}
 				return def;
-			}
-
-			private string _ToSender(object sender) {
-				return EncryptTool.ToMD5(sender.GetType().ToString());
-			}
-			private string _ToKey<T>(string key) {
-				return EncryptTool.ToMD5(typeof(T).Name + key);
-			}
-			private string _EncodeSrc(string src) {
-				return EncryptTool.EncodeB64R(src);
-			}
-			private string _DecodeSrc(string src) {
-				return EncryptTool.DecodeB64R(src);
 			}
 		}
 	}

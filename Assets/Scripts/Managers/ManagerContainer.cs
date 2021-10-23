@@ -36,6 +36,12 @@ namespace Game.Managers {
 			}
 		}
 
+		public void OnStartManagers() {
+			foreach (var item in _managerSortList) {
+				item.OnStartManager();
+			}
+		}
+
 		public void OnDestroyManagers() {
 			var p = _managerSortList.Last;
 			while (p != null) {
@@ -53,6 +59,17 @@ namespace Game.Managers {
 		public void OnArchiveSaveBegin() {
 			foreach (var item in _managerSortList) {
 				item.OnArchiveSaveBegin();
+			}
+		}
+
+		public void OnSceneLoaded() {
+			foreach (var item in _managerSortList) {
+				item.OnSceneLoaded();
+			}
+		}
+		public void OnSceneUnloaded() {
+			foreach (var item in _managerSortList) {
+				item.OnSceneUnloaded();
 			}
 		}
 	}

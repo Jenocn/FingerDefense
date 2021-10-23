@@ -11,7 +11,7 @@ namespace Game.Systems {
 	/// </summary>
 	public static class AssetSystem {
 		// 资源池
-		private static Dictionary<string, Dictionary<string, Dictionary<System.Type, Object>>> _editorAssetsPool = new Dictionary<string, Dictionary<string, Dictionary<System.Type, Object>>>();
+		private static Dictionary<string, Dictionary<string, List<Object>>> _editorAssetsPool = new Dictionary<string, Dictionary<string, List<Object>>>();
 		// 资源包持有
 		private static Dictionary<string, AssetBundle> _assetBundlePool = new Dictionary<string, AssetBundle>();
 		// 编辑器下资源根目录
@@ -65,8 +65,10 @@ namespace Game.Systems {
 #if UNITY_EDITOR
 			if (_editorAssetsPool.TryGetValue(bundle, out var tempDict0)) {
 				if (tempDict0.TryGetValue(name, out var tempDict1)) {
-					if (tempDict1.TryGetValue(type, out var asset)) {
-						return asset;
+					foreach (var obj in tempDict1) {
+						if (type.IsInstanceOfType(obj)) {
+							return obj;
+						}
 					}
 				}
 			}
@@ -143,7 +145,7 @@ namespace Game.Systems {
 						foreach (var filename in items) {
 							var obj = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(filename);
 							if (obj) {
-								_AddToEditorPool(bundle, obj.name, obj.GetType(), obj);
+								_AddToEditorPool(bundle, obj.name, obj);
 								bRet = true;
 							}
 						}
@@ -277,16 +279,16 @@ namespace Game.Systems {
 			return retList;
 		}
 
-		private static void _AddToEditorPool(string bundle, string name, System.Type type, Object asset) {
+		private static void _AddToEditorPool(string bundle, string name, Object asset) {
 			if (!_editorAssetsPool.TryGetValue(bundle, out var tempDict0)) {
-				tempDict0 = new Dictionary<string, Dictionary<System.Type, Object>>();
+				tempDict0 = new Dictionary<string, List<Object>>();
 				_editorAssetsPool.Add(bundle, tempDict0);
 			}
-			if (!tempDict0.TryGetValue(name, out var tempDict1)) {
-				tempDict1 = new Dictionary<System.Type, Object>();
-				tempDict0.Add(name, tempDict1);
+			if (!tempDict0.TryGetValue(name, out var tempList)) {
+				tempList = new List<Object>();
+				tempDict0.Add(name, tempList);
 			}
-			tempDict1.Add(type, asset);
+			tempList.Add(asset);
 		}
 	}
 }

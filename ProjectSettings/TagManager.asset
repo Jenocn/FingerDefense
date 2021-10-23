@@ -19,8 +19,8 @@ TagManager:
   - Bomb
   - Effect
   - ParticleCollision
-  - 
-  - 
+  - AudioTrigger
+  - AudioObject
   - 
   - 
   - 

@@ -37,7 +37,7 @@ class GameApplication : MonoBehaviour {
 		ManagerCenter.OnArchiveSaveBegin();
 		ArchiveSystem.common.Save();
 		if (ArchiveSystem.current) {
-			ArchiveSystem.GetArchive(index).SaveData(ArchiveSystem.current.GetData());
+			ArchiveSystem.GetArchive(index).WriteData(ArchiveSystem.current.GetData());
 		}
 	}
 
@@ -60,28 +60,44 @@ class GameApplication : MonoBehaviour {
 
 	//===================================================================================================
 	private void Awake() {
+		// user folder
+		if (Application.isEditor) {
+			if (!System.IO.Directory.Exists("user")) {
+				System.IO.Directory.CreateDirectory("user");
+			}
+		}
+
 		// DOTween init
 		DOTween.Init();
 		DOTween.SetTweensCapacity(1000, 1000);
 
 		// LogSystem init
 		LogSystem.Init();
-		LogSystem.RegisterDebugLog(this, (string condition, string stackTrace) => {
-			if (Application.isEditor) {
-				System.IO.File.AppendAllText(PathTool.Join("user", "log.txt"), condition + "\n" + stackTrace);
-/*
-				// 非编辑器条件暂不生成文件
-			} else {
-				System.IO.File.AppendAllText(PathTool.Join(Application.persistentDataPath, "log.txt"), condition + "\n" + stackTrace);
-*/
-			}
-		});
+		if (Application.isEditor) {
+			// 日志文件
+			var logFile = PathTool.Join("user", "log.txt");
+			System.IO.File.WriteAllText(logFile, "");
+			LogSystem.RegisterDebugLog(this, (string condition, string stackTrace) => {
+				var text = "--------------------------------------------\n";
+				text = text + condition + "\n";
+				var rets = stackTrace.Split(new char[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
+				for (var i = 0; i < rets.Length; ++i) {
+					if (i >= 5) {
+						break;
+					}
+					text = text + rets[i] + "\n";
+				}
+				System.IO.File.AppendAllText(logFile, text);
+			});
+		}
 
 		// ArchiveSystem init
 		if (Application.isEditor) {
-			ArchiveSystem.Init("user/savedata", ".dat");
+			ArchiveSystem.Init("user/savedata", ".json");
+			ArchiveSystem.SetEncodeEnabled(false, false);
 		} else {
 			ArchiveSystem.Init(PathTool.Join(Application.persistentDataPath, "savedata"), ".dat");
+			ArchiveSystem.SetEncodeEnabled(true, true);
 		}
 		ArchiveSystem.SetArchiveDefaultNameOfIndex("archive");
 		ArchiveSystem.SetCommonName("common");
@@ -105,6 +121,7 @@ class GameApplication : MonoBehaviour {
 			assetsLoadList.AddLast("tiles");
 			assetsLoadList.AddLast("materials");
 			assetsLoadList.AddLast("scripts");
+			assetsLoadList.AddLast("audio");
 			assetsLoadList.AddLast("prefabs");
 			assetsLoadList.AddLast("scenes");
 
@@ -116,15 +133,38 @@ class GameApplication : MonoBehaviour {
 		// ManagerCenter init
 		ManagerCenter.OnInitManagers();
 
+		SceneManager.sceneLoaded += _OnSceneLoaded;
+		SceneManager.sceneUnloaded += _OnSceneUnloaded;
+
 		if (!Application.isEditor || AssetSystem.IsEditorUseAssetBundle) {
 			// LoadScene
 			SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
 		}
 	}
 
+	private void _OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+		ManagerCenter.OnSceneLoaded();
+	}
+	private void _OnSceneUnloaded(Scene scene) {
+		ManagerCenter.OnSceneUnloaded();
+	}
+
+	private void Start() {
+		// ManagerCenter start
+		ManagerCenter.OnStartManagers();
+	}
+
 	private void Update() {
 		InputSystem.Update();
 		MessageCenter.OnDispatch();
+	}
+
+	private void OnDestroy() {
+		// ManagerCenter destroy
+		ManagerCenter.OnDestroyManagers();
+
+		SceneManager.sceneLoaded -= _OnSceneLoaded;
+		SceneManager.sceneUnloaded -= _OnSceneUnloaded;
 	}
 
 	private static bool _bInit = false;

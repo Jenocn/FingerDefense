@@ -85,5 +85,42 @@ public class MessageScoreChange : MessageBase<MessageScoreChange> {
 /// <summary>
 /// 游戏失败
 /// </summary>
-public class MessageGameFailed : MessageBase<MessageGameFailed> {
+public class MessageGameFailed : MessageBase<MessageGameFailed> {}
+
+/// <summary>
+/// 播放背景音乐消息
+/// </summary>
+public class MessageMusicPlay : MessageBase<MessageMusicPlay> {
+	public MessageMusicPlay(MusicChannelType channelType, string audioName, float volume, bool bLoop) {
+		this.channelType = channelType;
+		this.audioName = audioName;
+		this.volumePercent = volume;
+		this.bLoop = bLoop;
+	}
+	public MusicChannelType channelType { get; private set; } = MusicChannelType.BGM;
+	public string audioName { get; private set; } = "";
+	public float volumePercent { get; private set; } = 1;
+	public bool bLoop { get; private set; } = true;
+}
+/// <summary>
+/// 背景音乐控制消息
+/// </summary>
+public class MessageMusicControl : MessageBase<MessageMusicControl> {
+	public MessageMusicControl(MusicChannelType channelType, AudioControlType controlType) {
+		this.channelType = channelType;
+		this.controlType = controlType;
+	}
+	public MusicChannelType channelType { get; private set; } = MusicChannelType.BGM;
+	public AudioControlType controlType { get; private set; } = AudioControlType.Play;
+}
+/// <summary>
+/// 播放音效消息
+/// </summary>
+public class MessageSoundEffect : MessageBase<MessageSoundEffect> {
+	public MessageSoundEffect(string audioName, float volume) {
+		this.audioName = audioName;
+		this.volumePercent = volume;
+	}
+	public string audioName { get; private set; } = "";
+	public float volumePercent { get; private set; } = 1;
 }

@@ -8,7 +8,8 @@ namespace Game.Managers {
 			_managers.Register<ScriptManager>();
 			_managers.Register<StringManager>();
 			_managers.Register<TableManager>();
-			// _managers.Register<InputManager>();
+			_managers.Register<AudioManager>();
+			_managers.Register<InputManager>();
 			_managers.Register<DamageManager>();
 			_managers.Register<MapManager>();
 			_managers.Register<ScoreManager>();
@@ -22,6 +23,11 @@ namespace Game.Managers {
 			_RegisterManagers();
 			_managers.OnInitManagers();
 		}
+
+		public static void OnStartManagers() {
+			_managers.OnStartManagers();
+		}
+		
 		public static void OnDestroyManagers() {
 			_managers.OnDestroyManagers();
 			_managers.UnregisterAll();
@@ -32,6 +38,13 @@ namespace Game.Managers {
 		}
 		public static void OnArchiveSaveBegin() {
 			_managers.OnArchiveSaveBegin();
+		}
+
+		public static void OnSceneLoaded() {
+			_managers.OnSceneLoaded();
+		}
+		public static void OnSceneUnloaded() {
+			_managers.OnSceneUnloaded();
 		}
 	}
 }
