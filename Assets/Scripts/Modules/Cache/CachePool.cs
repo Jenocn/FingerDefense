@@ -24,6 +24,16 @@ namespace Game.Modules {
             }
             _pool.Clear();
         }
+        public void Clear(bool bDestroy) {
+            if (bDestroy) {
+                foreach (var item in _pool) {
+                    if (item) {
+                        Object.Destroy(item);
+                    }
+                }
+            }
+            _pool.Clear();
+        }
         public int Size() {
             return _pool.Count;
         }

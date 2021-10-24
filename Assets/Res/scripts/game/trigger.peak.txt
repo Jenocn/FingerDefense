@@ -101,17 +101,18 @@ enum MusicChannelType {
 
 // 首页加载完成
 function home_loaded() {
-	music(MusicChannelType.BGM, "music_battle_001", 0.5, true);
+	music(MusicChannelType.BGM, "music_battle_001", 1, true);
 }
 
 // 战斗开始
 function battle_start(mapID) {
-	music(MusicChannelType.BGM, "music_battle_001", 0.5, true);
+	music(MusicChannelType.BGM, "music_battle_001", 1, true);
 }
 
 // 球发生碰撞
 function ball_collision(ballID, ballX, ballY, collisionX, collisionY) {
 	create_effect(EffectType.SmokeRun, collisionX, collisionY, 0);
+	sound_effect("effect_hit_001", 1);
 }
 
 // 砖块被击时

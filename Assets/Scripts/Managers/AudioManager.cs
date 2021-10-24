@@ -37,8 +37,8 @@ namespace Game.Managers {
 			Object.DontDestroyOnLoad(_audioRoot);
 			_audioMixerCollection = _audioRoot.GetComponent<AudioMixerCollection>();
 
-			_musicContainer = new AudioChannelContainer("MusicContainer", _audioRoot, _audioMixerCollection.musicMixerGroup);
-			_effectContainer = new AudioChannelContainer("EffectContainer", _audioRoot, _audioMixerCollection.effectMixerGroup);
+			_musicContainer = new AudioChannelContainer("MusicContainer", _audioRoot, _audioMixerCollection.musicMixerGroup, false);
+			_effectContainer = new AudioChannelContainer("EffectContainer", _audioRoot, _audioMixerCollection.effectMixerGroup, true);
 
 			var musicChannelType = typeof(MusicChannelType);
 			var musicChannelValues = musicChannelType.GetEnumValues();

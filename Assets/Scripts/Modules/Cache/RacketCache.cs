@@ -33,9 +33,7 @@ namespace Game.Modules {
         }
         public void Clear() {
             foreach (var item in _cachePool) {
-                item.Value.Clear((GameObject gameObject) => {
-                    Object.Destroy(gameObject);
-                });
+                item.Value.Clear(true);
             }
             _cachePool.Clear();
         }
