@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Systems;
+using GCL.Pattern;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityUiModel;
-using GCL.Pattern;
 
 namespace Game.Views {
     public class UiHome : UiModel {
@@ -27,7 +27,7 @@ namespace Game.Views {
                 uiStack.PopUI();
             });
             ui.Find("ButtonSetting").GetComponent<Button>().onClick.AddListener(() => {
-
+                uiStack.PushUI<UiSetting>();
             });
         }
     }

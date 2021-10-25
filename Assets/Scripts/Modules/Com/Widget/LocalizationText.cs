@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Views {
+namespace Game.Modules {
     [RequireComponent(typeof(Text))]
     public class LocalizationText : MonoBehaviour {
         [SerializeField]
@@ -14,8 +14,12 @@ namespace Game.Views {
         }
 
         private void Start() {
+            ResetText();
+        }
+
+        public void ResetText() {
             var element = Strings.StringUi.instance.GetElement(_key);
-            if (string.IsNullOrEmpty(element)) {
+            if (!string.IsNullOrEmpty(element)) {
                 _text.text = element;
             }
         }

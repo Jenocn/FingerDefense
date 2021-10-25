@@ -1,3 +1,8 @@
 {
-    "test":"你好呀"
+    "UiSetting_TextTitle":"设置",
+    "UiSetting_TextMusic":"音乐",
+    "UiSetting_TextSE":"音效",
+    "UiSetting_LanguageSign":"语言",
+    "UiSetting_LanguageValue":"简体中文",
+    "UiSetting_Back":"返回"
 }
