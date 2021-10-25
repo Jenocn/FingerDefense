@@ -16,16 +16,17 @@ class GameApplication : MonoBehaviour {
 		var archive = ArchiveSystem.GetArchive(index);
 		ArchiveSystem.SetCurrent(archive);
 		archive.Load();
-		ManagerCenter.OnArchiveLoaded();
+		ManagerCenter.OnArchiveLoaded(archive);
 	}
 
 	/// <summary>
 	/// 保存当前存档
 	/// </summary>
 	public static void SaveArchive() {
-		ManagerCenter.OnArchiveSaveBegin();
-		ArchiveSystem.common.Save();
+		SaveCommonArchive();
+
 		if (ArchiveSystem.current) {
+			ManagerCenter.OnArchiveSaveBegin(ArchiveSystem.current);
 			ArchiveSystem.current.Save();
 		}
 	}
@@ -34,11 +35,20 @@ class GameApplication : MonoBehaviour {
 	/// 将当前存档保存到index位置
 	/// </summary>
 	public static void SaveArchive(uint index) {
-		ManagerCenter.OnArchiveSaveBegin();
-		ArchiveSystem.common.Save();
+		SaveCommonArchive();
+
 		if (ArchiveSystem.current) {
+			ManagerCenter.OnArchiveSaveBegin(ArchiveSystem.current);
 			ArchiveSystem.GetArchive(index).WriteData(ArchiveSystem.current.GetData());
 		}
+	}
+
+	/// <summary>
+	/// 保存公共配置
+	/// </summary>
+	public static void SaveCommonArchive() {
+		ManagerCenter.OnCommonArchiveSaveBegin();
+		ArchiveSystem.common.Save();
 	}
 
 	/// <summary>
@@ -130,8 +140,12 @@ class GameApplication : MonoBehaviour {
 			}
 		}
 
+		// LocalizationSystem Init
+		LocalizationSystem.Init();
+
 		// ManagerCenter init
 		ManagerCenter.OnInitManagers();
+		ManagerCenter.OnCommonArchiveLoaded();
 
 		SceneManager.sceneLoaded += _OnSceneLoaded;
 		SceneManager.sceneUnloaded += _OnSceneUnloaded;

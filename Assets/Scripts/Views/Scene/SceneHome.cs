@@ -15,13 +15,13 @@ namespace Game.Views {
             _uiStack.PushUI<UiStart>();
 
             MessageCenter.AddListener<UiMessage_OnButtonRankMode>(this, (UiMessage_OnButtonRankMode msg) => {
-                GotoNormalGame(1);
+                GotoNormalGame(MapMode.Classic, 1);
             });
             MessageCenter.AddListener<UiMessage_OnButtonInfiniteMode>(this, (UiMessage_OnButtonInfiniteMode msg) => {
-                GotoNormalGame(1);
+                GotoNormalGame(MapMode.Infinite, 1);
             });
             MessageCenter.AddListener<UiMessage_OnButtonChallengeMode>(this, (UiMessage_OnButtonChallengeMode msg) => {
-                GotoNormalGame(1);
+                GotoNormalGame(MapMode.Challenge, 1);
             });
 
             _scriptManager.ExecuteWithCache("trigger", "home_loaded");
@@ -33,10 +33,10 @@ namespace Game.Views {
             MessageCenter.RemoveListener<UiMessage_OnButtonChallengeMode>(this);
         }
 
-        void GotoNormalGame(int id) {
-            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        void GotoNormalGame(MapMode mode, int id) {
             var mapManager = ManagerCenter.GetManager<MapManager>();
-            mapManager.SetCurrentID(id);
+            mapManager.SetCurrent(mode, id);
+            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
     }
 }

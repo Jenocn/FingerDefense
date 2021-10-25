@@ -78,7 +78,7 @@ namespace Game.Managers {
 			_musicContainer.StopAllChannels();
 		}
 
-		public override void OnArchiveSaveBegin() {
+		public override void OnCommonArchiveSaveBegin() {
 			_audioMixerContainer.SaveData();
 		}
 	}

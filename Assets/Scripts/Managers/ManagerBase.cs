@@ -1,10 +1,14 @@
-﻿namespace Game.Managers {
+﻿using Game.Systems;
+
+namespace Game.Managers {
 	public interface IGameManager {
 		void OnInitManager();
 		void OnStartManager();
 		void OnDestroyManager();
-		void OnArchiveLoaded();
-		void OnArchiveSaveBegin();
+		void OnArchiveLoaded(ArchiveSystem.Archive archive);
+		void OnArchiveSaveBegin(ArchiveSystem.Archive archive);
+		void OnCommonArchiveLoaded();
+		void OnCommonArchiveSaveBegin();
 		void OnSceneLoaded();
 		void OnSceneUnloaded();
 	}
@@ -19,8 +23,10 @@
 		public virtual void OnInitManager() {}
 		public virtual void OnStartManager() {}
 		public virtual void OnDestroyManager() {}
-		public virtual void OnArchiveLoaded() {}
-		public virtual void OnArchiveSaveBegin() {}
+		public virtual void OnArchiveLoaded(ArchiveSystem.Archive archive) {}
+		public virtual void OnArchiveSaveBegin(ArchiveSystem.Archive archive) {}
+		public virtual void OnCommonArchiveLoaded() {}
+		public virtual void OnCommonArchiveSaveBegin() {}
 		public virtual void OnSceneLoaded() {}
 		public virtual void OnSceneUnloaded() {}
 	}

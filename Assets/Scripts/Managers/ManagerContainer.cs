@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Game.Systems;
 
 namespace Game.Managers {
 	public class ManagerContainer {
@@ -50,15 +51,27 @@ namespace Game.Managers {
 			}
 		}
 
-		public void OnArchiveLoaded() {
+		public void OnArchiveLoaded(ArchiveSystem.Archive archive) {
 			foreach (var item in _managerSortList) {
-				item.OnArchiveLoaded();
+				item.OnArchiveLoaded(archive);
 			}
 		}
 
-		public void OnArchiveSaveBegin() {
+		public void OnArchiveSaveBegin(ArchiveSystem.Archive archive) {
 			foreach (var item in _managerSortList) {
-				item.OnArchiveSaveBegin();
+				item.OnArchiveSaveBegin(archive);
+			}
+		}
+
+		public void OnCommonArchiveLoaded() {
+			foreach (var item in _managerSortList) {
+				item.OnCommonArchiveLoaded();
+			}
+		}
+
+		public void OnCommonArchiveSaveBegin() {
+			foreach (var item in _managerSortList) {
+				item.OnCommonArchiveSaveBegin();
 			}
 		}
 

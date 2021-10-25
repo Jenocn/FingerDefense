@@ -2,14 +2,14 @@ using Game.Systems;
 using UnityEngine;
 
 namespace Game.Modules {
-	public class UnitState {
-		public static UnitState EMPTY { get; } = new UnitState();
+	public class StateBase {
+		public static StateBase EMPTY { get; } = new StateBase();
 		public GameObject gameObject { get; private set; }
 		public Transform transform { get => gameObject.transform; }
-		protected UnitStateMachine stateMachine { get; private set; }
+		protected StateMachine stateMachine { get; private set; }
 		protected LogSystem.Logger logger { get => stateMachine.logger; }
 
-		public void _Init(GameObject obj, UnitStateMachine stateMachine) {
+		public void _Init(GameObject obj, StateMachine stateMachine) {
 			gameObject = obj;
 			this.stateMachine = stateMachine;
 		}
@@ -25,7 +25,7 @@ namespace Game.Modules {
 			return gameObject.GetComponentInChildren<T>();
 		}
 
-		public void ChangeState<T>() where T : UnitState, new() {
+		public void ChangeState<T>() where T : StateBase, new() {
 			stateMachine.ChangeState<T>();
 		}
 	}

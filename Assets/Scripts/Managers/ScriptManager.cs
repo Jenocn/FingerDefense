@@ -106,8 +106,12 @@ namespace Game.Managers {
             _InitUnityModule();
             _InitGameModule();
 
+            VirtualMachine.modulePool.AddModuleFilename("Base", "base.peak");
+            // virtualJourney = VirtualMachine.LoadFile("base.peak");
+            // virtualJourney.Execute();
             VirtualMachine.LoadFile("main.peak")?.Execute();
         }
+        private VirtualJourney virtualJourney;
         public override void OnDestroyManager() {}
 
         private void _InitUnityModule() {
@@ -115,7 +119,7 @@ namespace Game.Managers {
             var module = new peak.interpreter.Module("Unity", space);
             VirtualMachine.modulePool.AddModule("Unity", module);
         }
-        private void _InitGameModule() {
+        private void _InitGameModule() {            
             var module = new peak.interpreter.Module("Game", new peak.interpreter.Space(peak.interpreter.SpaceType.None));
 
             // string_ui

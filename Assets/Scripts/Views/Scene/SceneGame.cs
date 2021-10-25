@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Managers;
 using GCL.Pattern;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,15 +23,20 @@ namespace Game.Views {
             MessageCenter.AddListener<UiMessage_OnButtonGameBack>(this, (UiMessage_OnButtonGameBack msg) => {
                 SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
             });
-            MessageCenter.AddListener<MessageGameFailed>(this, (MessageGameFailed msg) => {
-                _uiStack.PushUI<UiGameFailed>();
+            MessageCenter.AddListener<MessageGameOver>(this, (MessageGameOver msg) => {
+                if (msg.bWined) {
+                    var ui = _uiStack.PushUI<UiGameWined>();
+                    ui.ShowData(msg.score, msg.highHitCount, msg.bHighestScore);
+                } else {
+                    _uiStack.PushUI<UiGameFailed>();
+                }
             });
         }
 
         private void OnDestroy() {
             MessageCenter.RemoveListener<UiMessage_OnButtonGameAgain>(this);
             MessageCenter.RemoveListener<UiMessage_OnButtonGameBack>(this);
-            MessageCenter.RemoveListener<MessageGameFailed>(this);
+            MessageCenter.RemoveListener<MessageGameOver>(this);
         }
     }
 }

@@ -4,7 +4,7 @@ using Game.Systems;
 using UnityEngine;
 
 namespace Game.Modules {
-	public sealed class UnitStateMachine : MonoBehaviour {
+	public sealed class StateMachine : MonoBehaviour {
 
 		/// <summary>
 		/// 当前日志器
@@ -14,10 +14,10 @@ namespace Game.Modules {
 		/// <summary>
 		/// 当前State
 		/// </summary>
-		public UnitState currentState { get; private set; } = UnitState.EMPTY;
+		public StateBase currentState { get; private set; } = StateBase.EMPTY;
 
 		// 历史State
-		private LinkedList<UnitState> _history = new LinkedList<UnitState>();
+		private LinkedList<StateBase> _history = new LinkedList<StateBase>();
 		private int _historyLength = 20;
 
 		// ChangeState调用保护
@@ -35,10 +35,6 @@ namespace Game.Modules {
 			logger = LogSystem.GetLogger("UnitState");
 		}
 
-		private void Start() {
-			ChangeState(currentState.GetType());
-		}
-
 		private void Update() {
 			if (_bNewState) {
 				currentState.OnStateStart();
@@ -48,27 +44,31 @@ namespace Game.Modules {
 		}
 
 		private void OnDestroy() {
-			ChangeState<UnitState>();
+			_ChangeState(StateBase.EMPTY, false);
 		}
 
-		public void ChangeState<T>() where T : UnitState, new() {
+		public void ChangeState<T>() where T : StateBase, new() {
 			_ChangeState(new T(), false);
 		}
 
 		public void ChangeState(Type type) {
-			var state = Activator.CreateInstance(type) as UnitState;
+			var state = Activator.CreateInstance(type) as StateBase;
 			_ChangeState(state, false);
+		}
+
+		public bool IsRunningState<T>() where T : StateBase {
+			return typeof(T).IsInstanceOfType(currentState);
 		}
 
 		public void RevertState() {
 			if (_history.Count == 0) { return; }
 			var state = _history.Last.Value;
 			_history.RemoveLast();
-			var newState = Activator.CreateInstance(state.GetType()) as UnitState;
+			var newState = Activator.CreateInstance(state.GetType()) as StateBase;
 			_ChangeState(state, true);
 		}
 
-		private void _ChangeState(UnitState state, bool bRevert) {
+		private void _ChangeState(StateBase state, bool bRevert) {
 			if (_bChangeStateSafe) {
 				logger.LogError(state.GetType().Name + ": Can't 'ChangeState' in 'OnStateCreate() or OnStateDestroy()'!");
 				return;
@@ -89,7 +89,7 @@ namespace Game.Modules {
 #endif
 		}
 
-		private void _AddHistory(UnitState state) {
+		private void _AddHistory(StateBase state) {
 			_history.AddLast(state);
 			if (_history.Count > _historyLength) {
 				_history.RemoveFirst();

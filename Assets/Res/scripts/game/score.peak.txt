@@ -1,9 +1,27 @@
 
+// 基础分基数数组,下标为BrickType枚举的值
+const ARRAY_BASE_SCORE = [0, 1, 1, 1, 2, 1];
+// 击杀分基数数组,下标为BrickType枚举的值
+const ARRAY_KILL_SCORE = [0, 1, 2, 3, 1, 1];
 
+/*
+计算分数函数:
+	得分=基础伤害分+连击分+击杀分
+*/
 function calc_score(curScore, brickID, damage, bDie, hitCount) {
-	var ret = curScore;
+	// 获取基础分
+	var score = ARRAY_BASE_SCORE[brickID];
 
-	ret += (damage * hitCount);
+	// 伤害分=基础分*伤害数值
+	score = score * damage;
 
-	return ret;
+	// 连击分
+	score = score + hitCount;
+
+	// 击杀分
+	if (bDie) {
+		score = score + ARRAY_KILL_SCORE[brickID];
+	}
+
+	return curScore + score;
 }

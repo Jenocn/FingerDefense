@@ -1,0 +1,67 @@
+import "Game";
+
+//========================================
+// 枚举定义
+//========================================
+
+enum BrickType {
+	BrickRed = 1,
+	BrickGreen = 2,
+	BrickBlue = 3,
+	Bomb = 4,
+	Spawn = 5,
+}
+
+enum BallType {
+	Default = 1,
+}
+
+enum EffectType {
+	BoomArea = 1, // 圆形范围炸弹
+	SmokeRun = 2, // 一溜烟特效
+	CollisionFireRed = 3, // 碰撞火花特效(红色)
+	CollisionFireGreen = 4, // 碰撞火花特效(绿色)
+	CollisionFireBlue = 5, // 碰撞火花特效(蓝色)
+	CollisionFireOrange = 6, // 碰撞火花特效(橙色)
+	CollisionFireYellowGreen = 7, // 碰撞火花特效(黄绿色)
+}
+
+enum ElementType {
+	None = 0,
+	Ball, // 球
+	Brick, // 砖块
+	Racket, // 球拍
+	Edge, // 边缘
+	Bomb, // 炸弹
+	Snare, // 陷阱
+}
+
+// 音频控制类型
+enum AudioControl {
+    None = 0,
+    Play, // 播放
+    Pause, // 暂停
+	UnPause, // 继续
+    Replay, // 重播
+    Stop, // 停止
+}
+
+// 背景音乐音轨
+enum MusicChannelType {
+	BGM = 0,
+    Side1,
+    Side2,
+    Side3,
+}
+
+// 地图模式
+enum MapMode {
+	None = 0,
+    Classic, // 经典模式
+    Infinite, // 无限模式
+    Challenge, // 挑战模式
+}
+
+//========================================
+// 函数定义
+//========================================

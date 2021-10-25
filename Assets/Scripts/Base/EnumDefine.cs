@@ -45,3 +45,10 @@ public enum MusicChannelType {
     Side2,
     Side3,
 }
+
+public enum MapMode {
+    None = 0,
+    Classic, // 经典模式
+    Infinite, // 无限模式
+    Challenge, // 挑战模式
+}

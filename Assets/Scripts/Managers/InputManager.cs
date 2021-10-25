@@ -121,7 +121,9 @@ namespace Game.Managers {
             InputSystem.AddAxisBind("Horizontal", "Vertical", (int) AxisID.Left);
             InputSystem.AddAxisBind("HorizontalVIEW", "VerticalVIEW", (int) AxisID.Right);
             InputSystem.AddAxisBind("AxisLRT", "AxisLRT", (int) AxisID.LRT);
+        }
 
+        public override void OnCommonArchiveLoaded() {
             var configStr = ArchiveSystem.common.GetString("InputManager", "input_binds", "");
             if (string.IsNullOrEmpty(configStr)) {
                 RebindDefault();
@@ -144,7 +146,7 @@ namespace Game.Managers {
             }
         }
 
-        public override void OnArchiveSaveBegin() {
+        public override void OnCommonArchiveSaveBegin() {
             var configReader = new GCL.Serialization.INIReader();
             var inputCommandType = typeof(InputCommand);
             foreach (var item in _keyboardBinds) {

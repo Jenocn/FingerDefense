@@ -83,9 +83,24 @@ public class MessageScoreChange : MessageBase<MessageScoreChange> {
 }
 
 /// <summary>
-/// 游戏失败
+/// 游戏结束消息
 /// </summary>
-public class MessageGameFailed : MessageBase<MessageGameFailed> {}
+public class MessageGameOver : MessageBase<MessageGameOver> {
+	public MessageGameOver(MapMode mapMode, int mapID, int score, int highHitCount, bool bWined, bool bHighestScore) {
+		this.mapMode = mapMode;
+		this.mapID = mapID;
+		this.score = score;
+		this.highHitCount = highHitCount;
+		this.bWined = bWined;
+		this.bHighestScore = bHighestScore;
+	}
+	public MapMode mapMode { get; private set; } = MapMode.None;
+	public int mapID { get; private set; } = 0;
+	public int score { get; private set; } = 0;
+	public int highHitCount { get; private set; } = 0;
+	public bool bWined { get; private set; } = false;
+	public bool bHighestScore { get; private set; } = false;
+}
 
 /// <summary>
 /// 播放背景音乐消息

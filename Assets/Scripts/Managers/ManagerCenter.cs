@@ -1,3 +1,5 @@
+using Game.Systems;
+
 namespace Game.Managers {
 	/// <summary>
 	/// Managers
@@ -27,17 +29,24 @@ namespace Game.Managers {
 		public static void OnStartManagers() {
 			_managers.OnStartManagers();
 		}
-		
+
 		public static void OnDestroyManagers() {
 			_managers.OnDestroyManagers();
 			_managers.UnregisterAll();
 
 		}
-		public static void OnArchiveLoaded() {
-			_managers.OnArchiveLoaded();
+		public static void OnArchiveLoaded(ArchiveSystem.Archive archive) {
+			_managers.OnArchiveLoaded(archive);
 		}
-		public static void OnArchiveSaveBegin() {
-			_managers.OnArchiveSaveBegin();
+		public static void OnArchiveSaveBegin(ArchiveSystem.Archive archive) {
+			_managers.OnArchiveSaveBegin(archive);
+		}
+
+		public static void OnCommonArchiveLoaded() {
+			_managers.OnCommonArchiveLoaded();
+		}
+		public static void OnCommonArchiveSaveBegin() {
+			_managers.OnCommonArchiveSaveBegin();
 		}
 
 		public static void OnSceneLoaded() {
