@@ -92,8 +92,10 @@ namespace Game.Managers {
         public override void OnInitManager() {
             _logger = LogSystem.GetLogger("Peak");
 
-            VirtualMachine.LocateLogger((string message) => {
-                _logger.Log(message);
+            VirtualMachine.LocateLogger((string info) => {
+                _logger.Log(info);
+            }, (string error) => {
+                _logger.LogError(error);
             });
             VirtualMachine.LocateOpenSrc((string filename) => {
                 var asset = AssetSystem.Load<TextAsset>("scripts", filename);
@@ -107,8 +109,6 @@ namespace Game.Managers {
             _InitGameModule();
 
             VirtualMachine.modulePool.AddModuleFilename("Base", "base.peak");
-            // virtualJourney = VirtualMachine.LoadFile("base.peak");
-            // virtualJourney.Execute();
             VirtualMachine.LoadFile("main.peak")?.Execute();
         }
         private VirtualJourney virtualJourney;
@@ -118,8 +118,68 @@ namespace Game.Managers {
             var space = new peak.interpreter.Space(peak.interpreter.SpaceType.None);
             var module = new peak.interpreter.Module("Unity", space);
             VirtualMachine.modulePool.AddModule("Unity", module);
+
+            // Random
+            var objectRandom = new ValueObject();
+            module.space.AddVariable(new Variable("Random", VariableAttribute.Const, objectRandom));
+            objectRandom.space.AddVariable(new peak.interpreter.Variable("Range", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(2, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    if (ValueTool.IsInteger(args[0]) && ValueTool.IsInteger(args[1])) {
+                        return new ValueNumber(Random.Range((int) (args[0] as ValueNumber).value, (int) (args[1] as ValueNumber).value));
+                    }
+                    _logger.LogError("\"Random.Range()\", the argument isn't Integer!");
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+
+            // Mathf
+            var objectMathf = new ValueObject();
+            module.space.AddVariable(new Variable("Mathf", VariableAttribute.Const, objectMathf));
+            objectMathf.space.AddVariable(new peak.interpreter.Variable("Clamp", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(3, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    if (ValueTool.IsNumber(args[0]) && ValueTool.IsNumber(args[1]) && ValueTool.IsNumber(args[2])) {
+                        return new ValueNumber(Mathf.Clamp(
+                            (float) (args[0] as ValueNumber).value,
+                            (float) (args[1] as ValueNumber).value,
+                            (float) (args[2] as ValueNumber).value));
+                    }
+                    _logger.LogError("\"Mathf.Clamp()\", the argument isn't Number!");
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            objectMathf.space.AddVariable(new peak.interpreter.Variable("Clamp01", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(1, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    if (ValueTool.IsNumber(args[0])) {
+                        return new ValueNumber(Mathf.Clamp01((float) (args[0] as ValueNumber).value));
+                    }
+                    _logger.LogError("\"Mathf.Clamp01()\", the argument isn't Number!");
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            objectMathf.space.AddVariable(new peak.interpreter.Variable("Max", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(2, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    if (ValueTool.IsNumber(args[0]) && ValueTool.IsNumber(args[1])) {
+                        return new ValueNumber(Mathf.Max(
+                            (float) (args[0] as ValueNumber).value,
+                            (float) (args[1] as ValueNumber).value));
+                    }
+                    _logger.LogError("\"Mathf.Max()\", the argument isn't Number!");
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            objectMathf.space.AddVariable(new peak.interpreter.Variable("Min", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(2, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    if (ValueTool.IsNumber(args[0]) && ValueTool.IsNumber(args[1])) {
+                        return new ValueNumber(Mathf.Min(
+                            (float) (args[0] as ValueNumber).value,
+                            (float) (args[1] as ValueNumber).value));
+                    }
+                    _logger.LogError("\"Mathf.Min()\", the argument isn't Number!");
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
         }
-        private void _InitGameModule() {            
+        private void _InitGameModule() {
             var module = new peak.interpreter.Module("Game", new peak.interpreter.Space(peak.interpreter.SpaceType.None));
 
             // string_ui
@@ -186,6 +246,25 @@ namespace Game.Managers {
                     return ValueNull.DEFAULT_VALUE;
                 })
             ));
+            // create_brick
+            module.space.AddVariable(new peak.interpreter.Variable("create_brick", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(6, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    var msg = new PeakMessage_CreateBrick();
+                    if (ValueTool.IsInteger(args[0])) {
+                        msg.brickID = (int) ((ValueNumber) args[0]).value;
+                    }
+                    if (ValueTool.IsNumber(args[1]) && ValueTool.IsNumber(args[2])) {
+                        msg.position.Set((float) ((ValueNumber) args[1]).value, (float) ((ValueNumber) args[2]).value);
+                    }
+                    if (ValueTool.IsInteger(args[3])) {
+                        msg.hpMax = (int) ((ValueNumber) args[3]).value;
+                    }
+                    message.Send(msg);
+
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+
             // music
             module.space.AddVariable(new peak.interpreter.Variable("music", peak.interpreter.VariableAttribute.Const,
                 new peak.interpreter.ValueFunction(4, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {

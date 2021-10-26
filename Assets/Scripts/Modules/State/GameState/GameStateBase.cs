@@ -16,6 +16,7 @@ namespace Game.Modules {
 		public abstract void OnMessageBrickHit(MessageBrickHit msg);
 		public abstract void OnMessageRacketHit(MessageRacketHit msg);
 		public abstract void OnMessageFallIntoTrap(MessageFallIntoTrap msg);
+		public abstract void OnGameControllerEvent(GameController.Event e);
 
 		public override void OnStateCreate() {
 			controller = GetComponent<GameController>();
@@ -30,11 +31,16 @@ namespace Game.Modules {
 				controller.SetRacketDirection(pos);
 			});
 
+			controller.events.AddListener(this, OnGameControllerEvent);
+
 			scriptManager.message.AddListener<PeakMessage_CreateEffect>(this, (PeakMessage_CreateEffect msg) => {
 				controller.CreateEffect(msg.effectID, msg.position, msg.delay);
 			});
 			scriptManager.message.AddListener<PeakMessage_CreateBall>(this, (PeakMessage_CreateBall msg) => {
 				controller.CreateBall(msg.ballID, msg.position, msg.direction, msg.delay);
+			});
+			scriptManager.message.AddListener<PeakMessage_CreateBrick>(this, (PeakMessage_CreateBrick msg) => {
+				controller.CreateBrick(msg.brickID, msg.hpMax, msg.position);
 			});
 
 			MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
@@ -67,8 +73,6 @@ namespace Game.Modules {
 				++hitCount;
 				highHitCount = Mathf.Max(highHitCount, hitCount);
 
-				scoreManager.AddScore(msg.uniqueID, msg.damageResult, hitCount);
-
 				OnMessageBrickHit(msg);
 			});
 
@@ -91,11 +95,13 @@ namespace Game.Modules {
 		}
 
 		public override void OnStateStart() {
-			controller.CreateBall(1, Vector2.zero, Vector2.one, 1);
-
 			scriptManager.ExecuteWithCache("trigger", "battle_start",
 				new ScriptValue((int) mapManager.mapMode),
 				new ScriptValue(mapManager.currentID));
+
+			controller.CountDown(3, () => {
+				controller.CreateBall(1, new Vector2(0, -2), Vector2.one, 0);
+			});
 		}
 
 		public override void OnStateDestroy() {
@@ -105,6 +111,8 @@ namespace Game.Modules {
 			MessageCenter.RemoveListener<MessageBrickHit>(this);
 			scriptManager.message.RemoveListener<PeakMessage_CreateEffect>(this);
 			scriptManager.message.RemoveListener<PeakMessage_CreateBall>(this);
+			scriptManager.message.RemoveListener<PeakMessage_CreateBrick>(this);
+			controller.events.RemoveListener(this);
 		}
 
 	}

@@ -48,7 +48,7 @@ MonoBehaviour:
     configs:
     - srcFont: {fileID: 12800000, guid: 9777ed1f52dcc4862a6abeeed8d002c6, type: 3}
       destFont: {fileID: 12800000, guid: 9777ed1f52dcc4862a6abeeed8d002c6, type: 3}
-      fontSizePercent: 0.8
+      fontSizePercent: 0.75
     - srcFont: {fileID: 12800000, guid: e403d3c4c19884989a1a860c09c53c04, type: 3}
       destFont: {fileID: 12800000, guid: e403d3c4c19884989a1a860c09c53c04, type: 3}
       fontSizePercent: 0.8

@@ -1,20 +1,51 @@
 using System.Collections.Generic;
 using Game.Managers;
+using Game.Views;
+using GCL.Pattern;
 using UnityEngine;
+using UnityUiModel;
 
 namespace Game.Modules {
     [RequireComponent(typeof(GameTouch))]
+    [RequireComponent(typeof(UiStack))]
     [RequireComponent(typeof(StateMachine))]
     public class GameController : MonoBehaviour {
+
+        public enum Event {
+            BallZero,
+            BrickZero,
+        }
+
         [SerializeField]
         private Transform _gameNode = null;
         private StateMachine _stateMachine = null;
         private HashSet<UnitRacket> _handleRackets = new HashSet<UnitRacket>();
         private UnitRacket _currentRacket = null;
+        private LinkedList<UnitBall> _unitBalls = new LinkedList<UnitBall>();
 
         public Transform gameNode { get => _gameNode; }
+        public UiStack uiStack { get; private set; } = null;
         public GameTouch gameTouch { get; private set; } = null;
         public int ballAmount { get; private set; } = 0;
+        public int brickAmount { get; private set; } = 0;
+
+        public SimpleNotify<Event> events { get; private set; } = new SimpleNotify<Event>();
+
+        public void Stop() {
+            gameTouch.enabled = false;
+            foreach (var item in _unitBalls) {
+                item.SetMoveEnabled(false);
+                item.gameObject.SetActive(false);
+            }
+        }
+
+        public void Run() {
+            gameTouch.enabled = true;
+            foreach (var item in _unitBalls) {
+                item.SetMoveEnabled(true);
+                item.gameObject.SetActive(true);
+            }
+        }
 
         public void CreateRacket(Vector2 pos) {
             _handleRackets.RemoveWhere((UnitRacket item) => {
@@ -29,17 +60,39 @@ namespace Game.Modules {
         public void CreateBall(int ballID, Vector2 pos, Vector2 direction, float delay) {
             ExecuteWithStartCoroutine(delay, () => {
                 var ball = BallFactory.Create(ballID, pos, _gameNode, direction);
-                var unitDestroy = ball.GetComponent<UnitDestroy>();
-                ++ballAmount;
-                unitDestroy.AddDestroyListener(this, (DestroyType t) => {
-                    --ballAmount;
-                });
+                if (ball) {
+                    var unitDestroy = ball.GetComponent<UnitDestroy>();
+                    ++ballAmount;
+                    _unitBalls.AddLast(ball);
+                    unitDestroy.AddDestroyListener(this, (DestroyType t) => {
+                        --ballAmount;
+                        _unitBalls.Remove(ball);
+
+                        if (ballAmount == 0) {
+                            events.Send(Event.BallZero);
+                        }
+                    });
+                }
             });
         }
-        public bool CreateBrick(int id, int hpMax, Vector2 pos) {
+        public bool CreateBrick(int id, int hpMax, Vector2 pos, System.Action destroyAction = null) {
             if (hpMax > 0) {
                 var ret = BrickFactory.Create(id, hpMax, pos, _gameNode);
-                return ret != null;
+                if (ret) {
+                    var unitDestroy = ret.GetComponent<UnitDestroy>();
+                    ++brickAmount;
+                    unitDestroy.AddDestroyListener(this, (DestroyType t) => {
+                        --brickAmount;
+                        
+                        if (brickAmount == 0) {
+                            events.Send(Event.BrickZero);
+                        }
+                        if (destroyAction != null) {
+                            destroyAction();
+                        }
+                    });
+                    return true;
+                }
             }
             return false;
         }
@@ -58,6 +111,11 @@ namespace Game.Modules {
             ExecuteWithStartCoroutine(delay, () => {
                 EffectFactory.Create(effectID, pos, _gameNode);
             });
+        }
+
+        public void CountDown(int time, System.Action action) {
+            var uiCountDown = uiStack.PushUI<UiCountDown>();
+            uiCountDown.Play(time, action);
         }
 
         public void ExecuteWithStartCoroutine(float delay, System.Action action) {
@@ -82,6 +140,7 @@ namespace Game.Modules {
             ballAmount = 0;
 
             gameTouch = GetComponent<GameTouch>();
+            uiStack = GetComponent<UiStack>();
             _stateMachine = GetComponent<StateMachine>();
 
             var mapManager = ManagerCenter.GetManager<MapManager>();
@@ -90,10 +149,10 @@ namespace Game.Modules {
                 _stateMachine.ChangeState<GameStateClassic>();
                 break;
             case MapMode.Infinite:
-                _stateMachine.ChangeState<GameStateClassic>();
+                _stateMachine.ChangeState<GameStateInfinite>();
                 break;
             case MapMode.Challenge:
-                _stateMachine.ChangeState<GameStateClassic>();
+                _stateMachine.ChangeState<GameStateChallenge>();
                 break;
             default:
                 _stateMachine.ChangeState<GameStateClassic>();

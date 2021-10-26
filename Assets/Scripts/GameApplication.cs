@@ -124,6 +124,7 @@ class GameApplication : MonoBehaviour {
 		if (!Application.isEditor || AssetSystem.IsEditorUseAssetBundle) {
 			// assetsLoadList.AddLast("common");
 			// assetsLoadList.AddLast("tables");
+			assetsLoadList.AddLast("drive");
 			assetsLoadList.AddLast("fonts");
 			assetsLoadList.AddLast("strings");
 			assetsLoadList.AddLast("textures");

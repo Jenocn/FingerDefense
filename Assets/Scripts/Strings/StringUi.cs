@@ -7,6 +7,9 @@ namespace Game.Strings {
         public override void Load() {
             var currentInfo = LocalizationSystem.GetCurrentInfo();
             var text = AssetSystem.Load<TextAsset>("strings", "ui_" + currentInfo.fileSign)?.text;
+            if (string.IsNullOrEmpty(text)) {
+                text = AssetSystem.Load<TextAsset>("strings", "ui")?.text;
+            }
             if (!string.IsNullOrEmpty(text)) {
                 Assign(JSONTool.ParseToKV(text));
             }

@@ -34,6 +34,7 @@ namespace Game.Modules {
         }
 
         private void OnDestroy() {
+            _spriteRenderer.DOKill();
             _unitTriggerSub.triggerNotify.RemoveListener(this);
         }
 

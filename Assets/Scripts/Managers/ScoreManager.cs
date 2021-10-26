@@ -13,13 +13,15 @@ namespace Game.Managers {
 		private ScriptManager _scriptManager = null;
 		private Dictionary<int, int> _classicHighestScoreDict = new Dictionary<int, int>();
 		private int _infiniteHighestScore = 0;
+		private int _challengeHighestScore = 0;
 
 		public void InitScore() {
 			score = 0;
 		}
 
-		public void AddScore(int brickID, DamageResult result, int hitCount) {
+		public void AddScore(MapMode mapMode, int brickID, DamageResult result, int hitCount) {
 			var ret = _scriptManager.ExecuteWithCache("score.peak", "calc_score",
+				new ScriptValue((int) mapMode),
 				new ScriptValue(score),
 				new ScriptValue(brickID),
 				new ScriptValue(result.damageValue),
@@ -36,9 +38,7 @@ namespace Game.Managers {
 			} else if (mode == MapMode.Infinite) {
 				return _infiniteHighestScore;
 			} else if (mode == MapMode.Challenge) {
-				if (_classicHighestScoreDict.TryGetValue(mapID, out var ret)) {
-					return ret;
-				}
+				return _challengeHighestScore;
 			}
 			return 0;
 		}
@@ -49,7 +49,6 @@ namespace Game.Managers {
 				SetHighestScore(mode, mapID, score);
 				return true;
 			}
-			InitScore();
 			return false;
 		}
 
@@ -59,7 +58,7 @@ namespace Game.Managers {
 			} else if (mode == MapMode.Infinite) {
 				_infiniteHighestScore = score;
 			} else if (mode == MapMode.Challenge) {
-				_classicHighestScoreDict[mapID] = score;
+				_challengeHighestScore = score;
 			}
 		}
 
@@ -74,23 +73,23 @@ namespace Game.Managers {
 		public override void OnInitManager() {
 			_scriptManager = ManagerCenter.GetManager<ScriptManager>();
 		}
-		public override void OnDestroyManager() {
-		}
+		public override void OnDestroyManager() {}
 		public override void OnArchiveLoaded(ArchiveSystem.Archive archive) {
 			var src = archive.GetString("ScoreManager", "HighestScore", "");
 			if (!string.IsNullOrEmpty(src)) {
 				var ret = JSONTool.ParseToCustomKV<int, int>(src);
 				if (ret != null) {
 					_classicHighestScoreDict = ret;
-					foreach (var item in _classicHighestScoreDict) {
-						Debug.Log(item.Key + "," + item.Value);
-					}
 				}
 			}
+			_infiniteHighestScore = archive.GetInt("ScoreManager", "InfiniteHighestScore", 0);
+			_challengeHighestScore = archive.GetInt("ScoreManager", "ChallengeHighestScore", 0);
 		}
 		public override void OnArchiveSaveBegin(ArchiveSystem.Archive archive) {
 			var src = JSONTool.ToString(_classicHighestScoreDict);
 			archive.SetString("ScoreManager", "HighestScore", src);
+			archive.SetInt("ScoreManager", "InfiniteHighestScore", _infiniteHighestScore);
+			archive.SetInt("ScoreManager", "ChallengeHighestScore", _challengeHighestScore);
 		}
 	}
 }

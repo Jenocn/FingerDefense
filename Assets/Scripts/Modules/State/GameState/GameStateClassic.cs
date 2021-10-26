@@ -4,39 +4,28 @@ using UnityEngine;
 
 namespace Game.Modules {
 	public class GameStateClassic : GameStateBase {
-		private int _brickAmount = 0;
-		private bool _bOver = false;
-
 		public override void OnMessageBrickHit(MessageBrickHit msg) {
-			if (msg.damageResult.bDie) {
-				--_brickAmount;
-
-				if (_brickAmount == 0) {
-					if (!_bOver) {
-						_bOver = true;
-						
-						bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
-						MessageCenter.Send(new MessageGameOver(
-							mapManager.mapMode,
-							mapManager.currentID,
-							scoreManager.score,
-							highHitCount,
-							true, bHighest));
-					}
-				}
-			}
+			scoreManager.AddScore(mapManager.mapMode, msg.uniqueID, msg.damageResult, hitCount);
 		}
 		public override void OnMessageRacketHit(MessageRacketHit msg) {}
-		public override void OnMessageFallIntoTrap(MessageFallIntoTrap msg) {
-			if (controller.ballAmount <= 1) {
-				if (!_bOver) {
-					_bOver = true;
+		public override void OnMessageFallIntoTrap(MessageFallIntoTrap msg) {}
 
-					MessageCenter.Send(new MessageGameOver(
-						mapManager.mapMode, mapManager.currentID,
-						scoreManager.score, highHitCount, false, false));
-					scoreManager.InitScore();
-				}
+		public override void OnGameControllerEvent(GameController.Event e) {
+			if (e == GameController.Event.BrickZero) {
+				controller.Stop();
+
+				bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
+				MessageCenter.Send(new MessageGameOver(
+					mapManager.mapMode,
+					mapManager.currentID,
+					scoreManager.score,
+					highHitCount,
+					true, bHighest));
+			} else if (e == GameController.Event.BallZero) {
+				controller.Stop();
+				MessageCenter.Send(new MessageGameOver(
+					mapManager.mapMode, mapManager.currentID,
+					scoreManager.score, highHitCount, false, false));
 			}
 		}
 
@@ -48,10 +37,12 @@ namespace Game.Modules {
 
 			var element = TableMapdat.instance.GetElement(mapManager.currentID);
 			if (element) {
+				var i = 0;
 				foreach (var item in element.items) {
-					if (controller.CreateBrick(item.id, item.hpMax, item.position)) {
-						++_brickAmount;
-					}
+					controller.ExecuteWithStartCoroutine(i * 0.003f, () => {
+						controller.CreateBrick(item.id, item.hpMax, item.position);
+					});
+					++i;
 				}
 			}
 		}

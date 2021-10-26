@@ -12,3 +12,8 @@ public class PeakMessage_CreateBall : MessageBase<PeakMessage_CreateBall> {
 	public Vector2 direction = Vector2.one;
 	public float delay = 0;
 }
+public class PeakMessage_CreateBrick : MessageBase<PeakMessage_CreateBrick> {
+	public int brickID = 0;
+	public Vector2 position = Vector2.zero;
+	public int hpMax = 0;
+}

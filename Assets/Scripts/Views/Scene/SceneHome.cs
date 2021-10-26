@@ -6,13 +6,24 @@ using UnityUiModel;
 
 namespace Game.Views {
     public class SceneHome : MonoBehaviour {
+        private const uint ArchiveIndex = 1;
         private UiStack _uiStack = null;
         private ScriptManager _scriptManager = null;
+        private static bool _bTag = false;
         void Start() {
             _scriptManager = ManagerCenter.GetManager<ScriptManager>();
 
             _uiStack = GetComponent<UiStack>();
-            _uiStack.PushUI<UiStart>();
+
+            if (_bTag) {
+                _uiStack.PushUI<UiStart>();
+                _uiStack.PushUI<UiHome>();
+            } else {
+                _uiStack.PushUI<UiStart>();
+                _bTag = true;
+
+                GameApplication.LoadArchive(ArchiveIndex);
+            }
 
             MessageCenter.AddListener<UiMessage_OnButtonRankMode>(this, (UiMessage_OnButtonRankMode msg) => {
                 GotoNormalGame(MapMode.Classic, 1);

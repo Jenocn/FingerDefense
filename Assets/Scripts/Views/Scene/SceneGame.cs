@@ -30,6 +30,8 @@ namespace Game.Views {
                 } else {
                     _uiStack.PushUI<UiGameFailed>();
                 }
+
+                GameApplication.SaveArchive();
             });
         }
 

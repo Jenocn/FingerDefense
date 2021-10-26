@@ -21,6 +21,8 @@ namespace Game.Modules {
         private UnitTriggerMain _unitCollider = null;
         private UnitDestroy _unitDestroy = null;
 
+        private bool _bMove = true;
+
         private static List<System.Tuple<float, Vector2>> _dirList = new List<System.Tuple<float, Vector2>>() {
             new System.Tuple<float, Vector2>(0.393f, new Vector2(0.92f, 0.38f)), // 22.5
             new System.Tuple<float, Vector2>(0.785f, Vector2.one), // 45
@@ -35,6 +37,10 @@ namespace Game.Modules {
             new System.Tuple<float, Vector2>(-2.355f, new Vector2(-1, -1)), // -135
             new System.Tuple<float, Vector2>(-2.748f, new Vector2(-0.92f, -0.38f)), // -157.5
         };
+
+        public void SetMoveEnabled(bool b) {
+            _bMove = b;
+        }
 
         public void SetVelocity(float v) {
             _velocity = v;
@@ -83,9 +89,11 @@ namespace Game.Modules {
                 return;
             }
 
-            float deltaPosN = Time.deltaTime * _velocity;
-            var radain = Mathf.Atan2(_direction.y, _direction.x);
-            transform.Translate(Mathf.Cos(radain) * deltaPosN, Mathf.Sin(radain) * deltaPosN, 0);
+            if (_bMove) {
+                float deltaPosN = Time.deltaTime * _velocity;
+                var radain = Mathf.Atan2(_direction.y, _direction.x);
+                transform.Translate(Mathf.Cos(radain) * deltaPosN, Mathf.Sin(radain) * deltaPosN, 0);
+            }
         }
 
         private void _OnTriggerTrap(Collider2D target, UnitID targetID) {

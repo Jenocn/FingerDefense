@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Back
+  _useConfig: 1
 --- !u!1 &1242560805093016291
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Infinite
+  _useConfig: 1
 --- !u!1 &2324591861545196551
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Setting
+  _useConfig: 1
 --- !u!1 &3299201532508754761
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,8 +475,8 @@ MonoBehaviour:
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 50
+    m_MinSize: 4
+    m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
@@ -509,6 +512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Title
+  _useConfig: 1
 --- !u!1 &4535255948339506827
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Challenge
+  _useConfig: 1
 --- !u!1 &4886696525886062269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,6 +1023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiHome_Classic
+  _useConfig: 1
 --- !u!1 &7053763058070939582
 GameObject:
   m_ObjectHideFlags: 0

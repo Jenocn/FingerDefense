@@ -14,33 +14,64 @@ namespace Game.Tables {
 	public class TableMapdatElement : DataObject {
 		public Vector2Int gird = Vector2Int.zero;
 		public List<TableMapdatElementItem> items = new List<TableMapdatElementItem>();
-
 	}
 	public class TableMapdat : TableBase<TableMapdat, int, TableMapdatElement> {
+
+		private List<int> _normalIDs = new List<int>();
+		private Dictionary<int, TableMapdatElement> _infiniteList = new Dictionary<int, TableMapdatElement>();
+
+		public TableMapdatElement GetInfiniteElement(int id) {
+			if (_infiniteList.TryGetValue(id, out var ret)) {
+				return ret;
+			}
+			return null;
+		}
+
+		public List<int> GetNormalIDs() {
+			return _normalIDs;
+		}
 		public override void Load() {
+			_normalIDs.Clear();
+			_infiniteList.Clear();
 
-			var text = AssetSystem.Load<TextAsset>("mapdata", "normal_index")?.text;
-			if (string.IsNullOrEmpty(text)) {
-				return;
+			var text = AssetSystem.Load<TextAsset>("mapdata", "infinite_index")?.text;
+			if (!string.IsNullOrEmpty(text)) {
+				var jtoken = JSONTool.ParseToToken(text);
+				if (jtoken != null) {
+					JTokenHelper.ListArrayValue(jtoken, (JToken item) => {
+						var id = JTokenHelper.GetInt(item, "id", -1);
+						if (id != -1) {
+							var file = JTokenHelper.GetString(item, "file", "");
+							if (!string.IsNullOrEmpty(file)) {
+								var element = LoadElementFromFile(file);
+								if (element) {
+									_infiniteList.Add(id, element);
+								}
+							}
+						}
+					});
+				}
 			}
 
-			var jtoken = JSONTool.ParseToToken(text);
-			if (jtoken == null) {
-				return;
+			text = AssetSystem.Load<TextAsset>("mapdata", "normal_index")?.text;
+			if (!string.IsNullOrEmpty(text)) {
+				var jtoken = JSONTool.ParseToToken(text);
+				if (jtoken != null) {
+					JTokenHelper.ListArrayValue(jtoken, (JToken item) => {
+						var id = JTokenHelper.GetInt(item, "id", -1);
+						if (id != -1) {
+							var file = JTokenHelper.GetString(item, "file", "");
+							if (!string.IsNullOrEmpty(file)) {
+								var element = LoadElementFromFile(file);
+								if (element) {
+									_normalIDs.Add(id);
+									Emplace(id, element);
+								}
+							}
+						}
+					});
+				}
 			}
-			JTokenHelper.ListArrayValue(jtoken, (JToken item) => {
-				var id = JTokenHelper.GetInt(item, "id", -1);
-				if (id == -1) {
-					return;
-				}
-				var file = JTokenHelper.GetString(item, "file", "");
-				if (!string.IsNullOrEmpty(file)) {
-					var element = LoadElementFromFile(file);
-					if (element) {
-						Emplace(id, element);
-					}
-				}
-			});
 		}
 
 		public static TableMapdatElement LoadElementFromFile(string filename) {
