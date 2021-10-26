@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_TextTitle
+  _useConfig: 1
 --- !u!1 &2800342609260002273
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,11 +477,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9777ed1f52dcc4862a6abeeed8d002c6, type: 3}
-    m_FontSize: 30
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 71
+    m_MinSize: 2
+    m_MaxSize: 220
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -501,6 +502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_Back
+  _useConfig: 1
 --- !u!1 &3349404806691422155
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,7 +736,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -120, y: 0}
-  m_SizeDelta: {x: 81.1488, y: 30}
+  m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1496640847672690959
 CanvasRenderer:
@@ -806,6 +808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_TextSE
+  _useConfig: 1
 --- !u!1 &3978619353752037623
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,7 +882,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -120, y: 0}
-  m_SizeDelta: {x: 81.1488, y: 30}
+  m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2437448908942947320
 CanvasRenderer:
@@ -951,6 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_LanguageSign
+  _useConfig: 1
 --- !u!1 &4665957952095162755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,7 +1146,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -120, y: 0}
-  m_SizeDelta: {x: 81.1488, y: 30}
+  m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6028362944376670301
 CanvasRenderer:
@@ -1214,6 +1218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_TextMusic
+  _useConfig: 1
 --- !u!1 &5143352800026261554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,6 +1485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _key: UiSetting_LanguageValue
+  _useConfig: 1
 --- !u!1 &6034585699874639936
 GameObject:
   m_ObjectHideFlags: 0

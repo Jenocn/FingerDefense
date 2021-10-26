@@ -31,6 +31,17 @@ namespace Game.Managers {
 			_effectContainer.NewChannel(name, volume, false, true);
 		}
 
+		public void SetVolume(MixerType mixerType, float volume) {
+			_audioMixerContainer.SetVolume(_GetMixerKeyByType(mixerType), volume);
+		}
+		public float GetVolume(MixerType mixerType) {
+			return _audioMixerContainer.GetVolume(_GetMixerKeyByType(mixerType));
+		}
+
+		private string _GetMixerKeyByType(MixerType mixerType) {
+			return mixerType.GetType().GetEnumName(mixerType);
+		}
+
 		public override void OnInitManager() {
 			var prefab = AssetSystem.Load<GameObject>("prefabs", "AudioManagerObject");
 			_audioRoot = Object.Instantiate(prefab).transform;

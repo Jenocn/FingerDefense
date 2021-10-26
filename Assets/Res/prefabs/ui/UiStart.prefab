@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6170960302185365490}
   - component: {fileID: 6170960302185365491}
   - component: {fileID: 6170960302185365452}
+  - component: {fileID: 1423182829613295009}
   m_Layer: 5
   m_Name: TextPress
   m_TagString: Untagged
@@ -111,6 +112,19 @@ MonoBehaviour:
   _showInterval: 0.5
   _hideInterval: 0.5
   _bChildren: 0
+--- !u!114 &1423182829613295009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6170960302185365454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0db2a521a9b7a44921fba0caea764c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _key: UiStart_Tip
 --- !u!1 &6170960302807727329
 GameObject:
   m_ObjectHideFlags: 0

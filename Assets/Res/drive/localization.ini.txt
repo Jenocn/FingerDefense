@@ -1,0 +1,7 @@
+[CHS]
+FileSign=chs
+Show=简体中文
+
+[ENG]
+FileSign=eng
+Show=English

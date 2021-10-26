@@ -1,8 +1,24 @@
 {
+    "UiFailed_Title": "FAIL",
+    "UiFailed_Back": "Back",
+    "UiFailed_Again": "Again",
+    "UiWined_Title": "WIN",
+    "UiWined_Highest": "-NEW-",
+    "UiWined_Score": "-SCORE-",
+    "UiWined_Hit": "-HIT-",
+    "UiWined_Back": "Back",
+    "UiWined_Again": "Again",
+    "UiStart_Tip": "Press Start",
     "UiSetting_TextTitle":"Setting",
     "UiSetting_TextMusic":"Music",
     "UiSetting_TextSE":"SE",
     "UiSetting_LanguageSign":"Language",
     "UiSetting_LanguageValue":"English",
-    "UiSetting_Back":"Back"
+    "UiSetting_Back":"Back",
+    "UiHome_Title":"Finger Defense",
+    "UiHome_Classic":"Classic Mode",
+    "UiHome_Challenge":"Challenge Mode",
+    "UiHome_Infinite":"Infinite Mode",
+    "UiHome_Back":"Back",
+    "UiHome_Setting":"Setting"
 }

@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 class GameApplication : MonoBehaviour {
-
 	/// <summary>
 	/// 加载index位置的存档
 	/// </summary>

@@ -6,16 +6,16 @@ using UnityEngine.Audio;
 
 namespace Game.Managers {
 	public class AudioMixerContainer {
-		public class Data {
-			public AudioMixer mixer = null;
-			public float volume = 1;
-			public float pitch = 1;
+		public class _Data {
+			public AudioMixer mixer { get; set; } = null;
+			public float volume { get; set; } = 1;
+			public float pitch { get; set; } = 1;
 		}
 
-		private Dictionary<string, Data> _datas = new Dictionary<string, Data>();
+		private Dictionary<string, _Data> _datas = new Dictionary<string, _Data>();
 
 		public void AddMixer(string key, AudioMixer mixer) {
-			var data = new Data();
+			var data = new _Data();
 			data.mixer = mixer;
 			data.volume = 1;
 			_datas.Add(key, data);
@@ -29,9 +29,14 @@ namespace Game.Managers {
 		/// </summary>
 		public void SetVolume(string key, float volume = 1) {
 			if (_datas.TryGetValue(key, out var data)) {
-				data.volume = volume;
-				data.mixer.SetFloat("volume", Mathf.Clamp01(volume) * 80 - 80);
+				data.volume = Mathf.Clamp01(volume);
+				data.mixer.SetFloat("volume", _CalcVolume(volume));
 			}
+		}
+
+		private float _CalcVolume(float volume) {
+			var ret = 1 - Mathf.Clamp01(volume);
+			return (1 - ret * ret) * 80 - 80;
 		}
 
 		public float GetVolume(string key) {
@@ -65,10 +70,11 @@ namespace Game.Managers {
 		public void LoadData() {
 			foreach (var item in _datas) {
 				var data = item.Value;
-				data.volume = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Volume", 1);
-				data.mixer.SetFloat("volume", Mathf.Clamp01(data.volume) * 80 - 80);
 
-				data.volume = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Pitch", 100);
+				data.volume = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Volume", 1);
+				data.mixer.SetFloat("volume", _CalcVolume(data.volume));
+
+				data.pitch = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Pitch", 100);
 				data.mixer.SetFloat("pitch", Mathf.Clamp(data.pitch, 1, 1000));
 			}
 		}

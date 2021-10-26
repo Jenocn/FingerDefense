@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 [System.Serializable]
 public class HealthData {
     // 生命最大值

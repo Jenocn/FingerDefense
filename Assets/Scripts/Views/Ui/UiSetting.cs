@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Game.Modules;
+using Game.Managers;
 using Game.Systems;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,22 +11,28 @@ public class UiSetting : UiModel {
             return;
         }
         var ui = InstantiateUI(prefab).transform;
-        var textTitle = ui.Find("TextTitle").GetComponent<LocalizationText>();
 
         var optionMusic = ui.Find("OptionMusic").transform;
-        var textMusic = optionMusic.Find("TextSign").GetComponent<LocalizationText>();
-
         var optionSE = ui.Find("OptionSoundEffect").transform;
-        var textSE = optionSE.Find("TextSign").GetComponent<LocalizationText>();
-
         var optionLanguage = ui.Find("OptionLanguage").transform;
-        var textLanguageSign = optionLanguage.Find("TextSign").GetComponent<LocalizationText>();
-        var textLanguageValue = optionLanguage.Find("TextValue").GetComponent<LocalizationText>();
 
-        var optionBack = ui.Find("ButtonBack").transform;
-        var textBack = optionBack.Find("TextSign").GetComponent<LocalizationText>();
+        var sliderMusic = optionMusic.Find("Slider").GetComponent<Slider>();
+        var sliderSE = optionSE.Find("Slider").GetComponent<Slider>();
 
-        optionBack.GetComponent<Button>().onClick.AddListener(() => {
+        var audioManager = ManagerCenter.GetManager<AudioManager>();
+        
+        sliderMusic.value = audioManager.GetVolume(MixerType.Music);
+        sliderSE.value = audioManager.GetVolume(MixerType.Effect);
+
+        sliderMusic.onValueChanged.AddListener((float v) => {
+            audioManager.SetVolume(MixerType.Music, v);
+        });
+        sliderSE.onValueChanged.AddListener((float v) => {
+            audioManager.SetVolume(MixerType.Effect, v);
+        });
+
+        ui.Find("ButtonBack").GetComponent<Button>().onClick.AddListener(() => {
+            GameApplication.SaveCommonArchive();
             uiStack.PopUI();
         });
 
@@ -38,18 +42,5 @@ public class UiSetting : UiModel {
         optionLanguage.Find("ButtonRight").GetComponent<Button>().onClick.AddListener(() => {
             LocalizationSystem.ChangeLanguageNext();
         });
-
-        LocalizationSystem.message.AddListener(this, () => {
-            textTitle.ResetText();
-            textMusic.ResetText();
-            textSE.ResetText();
-            textLanguageSign.ResetText();
-            textLanguageValue.ResetText();
-            textBack.ResetText();
-        });
-    }
-    public override void OnDestroyUI() {
-        LocalizationSystem.message.RemoveListener(this);
-
     }
 }

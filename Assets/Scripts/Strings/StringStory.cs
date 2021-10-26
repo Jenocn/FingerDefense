@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Game.Strings {
     public class StringStory : TableBase<StringStory, string, string> {
         public override void Load() {
-            var text = AssetSystem.Load<TextAsset>("strings", "story_" + LocalizationSystem.language)?.text;
+            var currentInfo = LocalizationSystem.GetCurrentInfo();
+            var text = AssetSystem.Load<TextAsset>("strings", "story_" + currentInfo.fileSign)?.text;
             if (!string.IsNullOrEmpty(text)) {
                 Assign(JSONTool.ParseToKV(text));
             }
