@@ -1,4 +1,8 @@
 {
+    "UiLevelSelect_Title": "LEVEL",
+    "UiLevelSelect_Back": "Back",
+    "UiLevelSelect_Up": "Prev",
+    "UiLevelSelect_Down": "Next",
     "UiGameOver_Combo": "-COMBO HIT-",
     "UiGameOver_Score": "-SCORE-",
     "UiGameOver_New": "-NEW-",

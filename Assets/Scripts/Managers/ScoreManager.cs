@@ -31,6 +31,11 @@ namespace Game.Managers {
 			_ChangeScore((int) ret.GetNumber(score));
 		}
 
+		public int GetClassicStar(int mapID) {
+			// temp todo...
+			return 0;
+		}
+
 		public int GetHighestScore(MapMode mode, int mapID) {
 			if (mode == MapMode.Classic) {
 				if (_classicHighestScoreDict.TryGetValue(mapID, out var ret)) {

@@ -129,10 +129,10 @@ class GameApplication : MonoBehaviour {
 		var assetsLoadList = new LinkedList<string>();
 		if (!Application.isEditor || AssetSystem.IsEditorUseAssetBundle) {
 			// assetsLoadList.AddLast("common");
-			// assetsLoadList.AddLast("tables");
 			assetsLoadList.AddLast("drive");
 			assetsLoadList.AddLast("fonts");
 			assetsLoadList.AddLast("strings");
+			assetsLoadList.AddLast("tables");
 			assetsLoadList.AddLast("textures");
 			assetsLoadList.AddLast("tiles");
 			assetsLoadList.AddLast("materials");

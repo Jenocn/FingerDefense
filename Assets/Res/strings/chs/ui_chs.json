@@ -1,4 +1,8 @@
 {
+    "UiLevelSelect_Title": "关卡选择",
+    "UiLevelSelect_Back": "返回",
+    "UiLevelSelect_Up": "上一页",
+    "UiLevelSelect_Down": "下一页",
     "UiGameOver_Combo": "-连击-",
     "UiGameOver_Score": "-得分-",
     "UiGameOver_New": "-新纪录-",
