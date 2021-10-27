@@ -39,7 +39,7 @@ namespace Game.Views {
                 GotoNormalGame(MapMode.Challenge, 1);
             });
 
-            _scriptManager.ExecuteWithCache("trigger", "home_loaded");
+            _scriptManager.ExecuteWithCache("trigger.peak", "home_loaded");
         }
 
         private void OnDestroy() {

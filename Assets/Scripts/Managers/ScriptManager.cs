@@ -16,13 +16,12 @@ namespace Game.Managers {
         private Dictionary<string, VirtualJourney> _cacheVJ = new Dictionary<string, VirtualJourney>();
         public MessageDispatcher message { get => _messageDispatcher; }
 
-        public VirtualJourney Load(string filename) {
-            var extname = GCL.Base.PathTool.Extname(filename);
-            if (string.IsNullOrEmpty(extname)) {
-                filename = filename + ".peak";
-            }
+        public VirtualJourney Load(string filename, bool bExecute = true) {
             var vj = VirtualMachine.LoadFile(filename);
-            if ((vj != null) && vj.Execute()) {
+            if (vj != null) {
+                if (bExecute) {
+                    vj.Execute();
+                }
                 return vj;
             }
             return null;
@@ -68,7 +67,7 @@ namespace Game.Managers {
 
         public ScriptValue Execute(VirtualJourney journey, string functionName, List<ScriptValue> args) {
             if (journey != null) {
-                var tempArgs = new List<peak.interpreter.Value>();
+                var tempArgs = new List<peak.interpreter.Value>(args.Count);
                 for (var i = 0; i < args.Count; ++i) {
                     tempArgs.Add(args[i] ? args[i].value : ScriptValue.NULL.value);
                 }
@@ -78,7 +77,7 @@ namespace Game.Managers {
         }
         public ScriptValue Execute(VirtualJourney journey, string functionName, params ScriptValue[] args) {
             if (journey != null) {
-                var tempArgs = new List<peak.interpreter.Value>();
+                var tempArgs = new List<peak.interpreter.Value>(args.Length);
                 for (var i = 0; i < args.Length; ++i) {
                     tempArgs.Add(args[i] ? args[i].value : ScriptValue.NULL.value);
                 }

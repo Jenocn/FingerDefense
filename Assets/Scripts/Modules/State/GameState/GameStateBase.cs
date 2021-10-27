@@ -9,6 +9,7 @@ namespace Game.Modules {
 		protected ScriptManager scriptManager { get; private set; } = null;
 		protected ScoreManager scoreManager { get; private set; } = null;
 		protected MapManager mapManager { get; private set; } = null;
+		protected peak.VirtualJourney scriptTrigger { get; private set; } = null;
 
 		protected int highHitCount { get; set; } = 0;
 		protected int hitCount { get; set; } = 0;
@@ -24,6 +25,7 @@ namespace Game.Modules {
 			scriptManager = ManagerCenter.GetManager<ScriptManager>();
 			scoreManager = ManagerCenter.GetManager<ScoreManager>();
 			mapManager = ManagerCenter.GetManager<MapManager>();
+			scriptTrigger = scriptManager.LoadWithCache("trigger.peak");
 
 			controller.gameTouch.SetTouchBeginAction((Vector2 pos) => {
 				controller.CreateRacket(pos);
@@ -45,7 +47,7 @@ namespace Game.Modules {
 			});
 
 			MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
-				scriptManager.ExecuteWithCache("trigger", "ball_collision",
+				scriptManager.Execute(scriptTrigger, "ball_collision",
 					new ScriptValue(msg.ballID),
 					new ScriptValue(msg.ballPosition.x),
 					new ScriptValue(msg.ballPosition.y),
@@ -55,7 +57,7 @@ namespace Game.Modules {
 
 			MessageCenter.AddListener<MessageBrickHit>(this, (MessageBrickHit msg) => {
 
-				scriptManager.ExecuteWithCache("trigger", "brick_hit",
+				scriptManager.Execute(scriptTrigger, "brick_hit",
 					new ScriptValue(msg.uniqueID),
 					new ScriptValue(msg.position.x),
 					new ScriptValue(msg.position.y),
@@ -63,7 +65,7 @@ namespace Game.Modules {
 					new ScriptValue((int) msg.attackElementType));
 
 				if (msg.damageResult.bDie) {
-					scriptManager.ExecuteWithCache("trigger", "brick_die",
+					scriptManager.Execute(scriptTrigger, "brick_die",
 						new ScriptValue(msg.uniqueID),
 						new ScriptValue(msg.position.x),
 						new ScriptValue(msg.position.y),
@@ -106,7 +108,7 @@ namespace Game.Modules {
 		}
 
 		public override void OnStateStart() {
-			scriptManager.ExecuteWithCache("trigger", "battle_start",
+			scriptManager.Execute(scriptTrigger, "battle_start",
 				new ScriptValue((int) mapManager.mapMode),
 				new ScriptValue(mapManager.currentID));
 

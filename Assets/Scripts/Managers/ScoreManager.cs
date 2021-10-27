@@ -11,6 +11,7 @@ namespace Game.Managers {
 		private const int SCORE_MAX = 999999999;
 		public int score { get; private set; } = 0;
 		private ScriptManager _scriptManager = null;
+		private peak.VirtualJourney _vj = null;
 		private Dictionary<int, int> _classicHighestScoreDict = new Dictionary<int, int>();
 		private int _infiniteHighestScore = 0;
 		private int _challengeHighestScore = 0;
@@ -20,7 +21,7 @@ namespace Game.Managers {
 		}
 
 		public void AddScore(MapMode mapMode, int brickID, DamageResult result, int hitCount) {
-			var ret = _scriptManager.ExecuteWithCache("score.peak", "calc_score",
+			var ret = _scriptManager.Execute(_vj, "calc_score",
 				new ScriptValue((int) mapMode),
 				new ScriptValue(score),
 				new ScriptValue(brickID),
@@ -72,6 +73,7 @@ namespace Game.Managers {
 
 		public override void OnInitManager() {
 			_scriptManager = ManagerCenter.GetManager<ScriptManager>();
+			_vj = _scriptManager.LoadWithCache("score.peak");
 		}
 		public override void OnDestroyManager() {}
 		public override void OnArchiveLoaded(ArchiveSystem.Archive archive) {
