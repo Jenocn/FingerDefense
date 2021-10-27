@@ -25,6 +25,10 @@ namespace Game.Views {
                 GameApplication.LoadArchive(ArchiveIndex);
             }
 
+            if (GameApplication.isFirstOpen) {
+                _uiStack.PushUI<UiFirstLanguage>();
+            }
+
             MessageCenter.AddListener<UiMessage_OnButtonRankMode>(this, (UiMessage_OnButtonRankMode msg) => {
                 GotoNormalGame(MapMode.Classic, 1);
             });

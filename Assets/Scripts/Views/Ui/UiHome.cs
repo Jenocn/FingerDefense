@@ -24,7 +24,7 @@ namespace Game.Views {
                 MessageCenter.Send(new UiMessage_OnButtonChallengeMode());
             });
             ui.Find("ButtonBack").GetComponent<Button>().onClick.AddListener(() => {
-                uiStack.PopUI();
+                PopThisUI();
             });
             ui.Find("ButtonSetting").GetComponent<Button>().onClick.AddListener(() => {
                 uiStack.PushUI<UiSetting>();

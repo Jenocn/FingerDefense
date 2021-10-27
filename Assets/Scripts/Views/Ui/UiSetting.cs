@@ -33,7 +33,7 @@ public class UiSetting : UiModel {
 
         ui.Find("ButtonBack").GetComponent<Button>().onClick.AddListener(() => {
             GameApplication.SaveCommonArchive();
-            uiStack.PopUI();
+            PopThisUI();
         });
 
         optionLanguage.Find("ButtonLeft").GetComponent<Button>().onClick.AddListener(() => {

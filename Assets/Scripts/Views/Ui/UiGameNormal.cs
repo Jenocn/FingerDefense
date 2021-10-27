@@ -18,9 +18,8 @@ namespace Game.Views {
             var ui = InstantiateUI(prefab).transform;
             var top = ui.Find("Top");
             if (top) {
-                var buttonPause = top.Find("ButtonPause")?.GetComponent<StateButton>();
-                buttonPause?.SetForceAction((int index) => {
-                    MessageCenter.Send(new MessageGamePause(index == 0));
+                top.Find("ButtonPause").GetComponent<Button>().onClick.AddListener(()=>{
+                    MessageCenter.Send(new MessageGamePause(true));
                 });
 
                 _textScore = top.Find("TextScore")?.GetComponent<Text>();

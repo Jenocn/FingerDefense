@@ -31,7 +31,7 @@ namespace Game.Views {
                         if (_action != null) {
                             _action();
                         }
-                        uiStack.PopUI();
+                        PopThisUI();
                     }
                 }
             }

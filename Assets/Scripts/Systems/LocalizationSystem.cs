@@ -86,6 +86,13 @@ namespace Game.Systems {
 			}
 		}
 
+		public static void ChangeLanguage(string key) {
+			var index = _infoList.FindIndex((Info info) => {
+				return info.key == key;
+			});
+			ChangeLanguage(index);
+		}
+
 		public static void ChangeLanguageBefore() {
 			var newIndex = _index - 1;
 			if (newIndex < 0) {

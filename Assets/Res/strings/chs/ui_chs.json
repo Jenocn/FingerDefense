@@ -1,4 +1,8 @@
 {
+    "UiGameNormal_Score": "分数:",
+    "UiPause_Title": "暂停",
+    "UiPause_Back": "退出",
+    "UiPause_Resume": "继续",
     "UiFailed_Title": "失败",
     "UiFailed_Back": "返回",
     "UiFailed_Again": "再来",

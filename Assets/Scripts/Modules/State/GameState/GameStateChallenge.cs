@@ -35,6 +35,9 @@ namespace Game.Modules {
 					scoreManager.score, highHitCount, false, false));
 			}
 		}
+		public override void OnGamePause(bool bPause) {
+			
+		}
 
 		private bool _Generate() {
 			for (var i = _index; i < _normalIDs.Count; ++i) {

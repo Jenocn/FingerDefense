@@ -25,6 +25,9 @@ namespace Game.Modules {
 					scoreManager.score, highHitCount, false, false));
 			}
 		}
+		public override void OnGamePause(bool bPause) {
+
+		}
 
 		public override void OnStateCreate() {
 			base.OnStateCreate();
@@ -44,10 +47,12 @@ namespace Game.Modules {
 		public override void OnStateUpdate() {
 			base.OnStateUpdate();
 
-			_duration += Time.deltaTime;
-			if (_duration >= 0.25f) {
-				_Generate(1);
-				_duration = 0;
+			if (!controller.isStop) {
+				_duration += Time.deltaTime;
+				if (_duration >= 0.25f) {
+					_Generate(1);
+					_duration = 0;
+				}
 			}
 		}
 

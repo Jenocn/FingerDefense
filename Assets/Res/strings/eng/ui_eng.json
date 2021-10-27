@@ -1,4 +1,8 @@
 {
+    "UiGameNormal_Score": "Score:",
+    "UiPause_Title": "PAUSE",
+    "UiPause_Back": "Exit",
+    "UiPause_Resume": "Resume",
     "UiFailed_Title": "FAIL",
     "UiFailed_Back": "Back",
     "UiFailed_Again": "Again",

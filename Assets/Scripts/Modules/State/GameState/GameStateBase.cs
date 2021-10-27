@@ -1,5 +1,5 @@
 using Game.Managers;
-using Game.Tables;
+using Game.Views;
 using GCL.Pattern;
 using UnityEngine;
 
@@ -17,6 +17,7 @@ namespace Game.Modules {
 		public abstract void OnMessageRacketHit(MessageRacketHit msg);
 		public abstract void OnMessageFallIntoTrap(MessageFallIntoTrap msg);
 		public abstract void OnGameControllerEvent(GameController.Event e);
+		public abstract void OnGamePause(bool bPause);
 
 		public override void OnStateCreate() {
 			controller = GetComponent<GameController>();
@@ -90,6 +91,16 @@ namespace Game.Modules {
 				OnMessageFallIntoTrap(msg);
 			});
 
+			MessageCenter.AddListener<MessageGamePause>(this, (MessageGamePause msg) => {
+				if (msg.bPause) {
+					controller.Stop();
+					controller.uiStack.PushUI<UiGamePause>();
+				} else {
+					controller.Run();
+				}
+				OnGamePause(msg.bPause);
+			});
+
 			hitCount = 0;
 			scoreManager.InitScore();
 		}
@@ -109,6 +120,7 @@ namespace Game.Modules {
 			MessageCenter.RemoveListener<MessageFallIntoTrap>(this);
 			MessageCenter.RemoveListener<MessageRacketHit>(this);
 			MessageCenter.RemoveListener<MessageBrickHit>(this);
+			MessageCenter.RemoveListener<MessageGamePause>(this);
 			scriptManager.message.RemoveListener<PeakMessage_CreateEffect>(this);
 			scriptManager.message.RemoveListener<PeakMessage_CreateBall>(this);
 			scriptManager.message.RemoveListener<PeakMessage_CreateBrick>(this);

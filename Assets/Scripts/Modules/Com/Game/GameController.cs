@@ -31,20 +31,27 @@ namespace Game.Modules {
 
         public SimpleNotify<Event> events { get; private set; } = new SimpleNotify<Event>();
 
+        public bool isStop { get; private set; } = false;
+
         public void Stop() {
+            isStop = true;
             gameTouch.enabled = false;
             foreach (var item in _unitBalls) {
-                item.SetMoveEnabled(false);
-                item.gameObject.SetActive(false);
+                PauseBall(item, true);
             }
         }
 
         public void Run() {
+            isStop = false;
             gameTouch.enabled = true;
             foreach (var item in _unitBalls) {
-                item.SetMoveEnabled(true);
-                item.gameObject.SetActive(true);
+                PauseBall(item, false);
             }
+        }
+
+        public void PauseBall(UnitBall ball, bool bPause) {
+            ball.SetMoveEnabled(!bPause);
+            ball.gameObject.SetActive(!bPause);
         }
 
         public void CreateRacket(Vector2 pos) {
@@ -72,6 +79,9 @@ namespace Game.Modules {
                             events.Send(Event.BallZero);
                         }
                     });
+                    if (isStop) {
+                        PauseBall(ball, true);
+                    }
                 }
             });
         }
@@ -83,7 +93,7 @@ namespace Game.Modules {
                     ++brickAmount;
                     unitDestroy.AddDestroyListener(this, (DestroyType t) => {
                         --brickAmount;
-                        
+
                         if (brickAmount == 0) {
                             events.Send(Event.BrickZero);
                         }

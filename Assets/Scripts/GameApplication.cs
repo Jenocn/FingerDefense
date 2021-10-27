@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 class GameApplication : MonoBehaviour {
+	public static bool isFirstOpen { get; private set; } = true;
+
 	/// <summary>
 	/// 加载index位置的存档
 	/// </summary>
@@ -111,6 +113,10 @@ class GameApplication : MonoBehaviour {
 		ArchiveSystem.SetArchiveDefaultNameOfIndex("archive");
 		ArchiveSystem.SetCommonName("common");
 		ArchiveSystem.common.Load();
+
+		// isFirstOpen
+		isFirstOpen = ArchiveSystem.common.GetBool("GameApplication", "isFirstOpen", true);
+		ArchiveSystem.common.SetBool("GameApplication", "isFirstOpen", false);
 
 		// AssetSystem init
 		if (Application.isEditor) {
