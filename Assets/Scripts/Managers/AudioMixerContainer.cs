@@ -29,14 +29,8 @@ namespace Game.Managers {
 		/// </summary>
 		public void SetVolume(string key, float volume = 1) {
 			if (_datas.TryGetValue(key, out var data)) {
-				data.volume = Mathf.Clamp01(volume);
-				data.mixer.SetFloat("volume", _CalcVolume(volume));
+				_SetVolume(data, volume);
 			}
-		}
-
-		private float _CalcVolume(float volume) {
-			var ret = 1 - Mathf.Clamp01(volume);
-			return (1 - ret * ret) * 80 - 80;
 		}
 
 		public float GetVolume(string key) {
@@ -47,12 +41,11 @@ namespace Game.Managers {
 		}
 
 		/// <summary>
-		/// 1 ~ 1000, 默认值100
+		/// 0.01 ~ 10, 默认值1
 		/// </summary>
-		public void SetPitch(string key, float pitch = 100) {
+		public void SetPitch(string key, float pitch = 1) {
 			if (_datas.TryGetValue(key, out var data)) {
-				data.pitch = pitch;
-				data.mixer.SetFloat("pitch", Mathf.Clamp(pitch, 1, 1000));
+				_SetPitch(data, pitch);
 			}
 		}
 
@@ -67,22 +60,28 @@ namespace Game.Managers {
 			return _datas.ContainsKey(key);
 		}
 
-		public void LoadData() {
+		public void LoadData(ArchiveSystem.Archive archive) {
 			foreach (var item in _datas) {
-				var data = item.Value;
-
-				data.volume = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Volume", 1);
-				data.mixer.SetFloat("volume", _CalcVolume(data.volume));
-
-				data.pitch = ArchiveSystem.common.GetFloat("AudioMixerContainer", item.Key + "Pitch", 100);
-				data.mixer.SetFloat("pitch", Mathf.Clamp(data.pitch, 1, 1000));
+				_SetVolume(item.Value, archive.GetFloat("AudioMixerContainer", item.Key + "Volume", 1));
+				_SetPitch(item.Value, archive.GetFloat("AudioMixerContainer", item.Key + "Pitch", 1));
 			}
 		}
-		public void SaveData() {
+		public void SaveData(ArchiveSystem.Archive archive) {
 			foreach (var item in _datas) {
-				ArchiveSystem.common.SetFloat("AudioMixerContainer", item.Key + "Volume", item.Value.volume);
-				ArchiveSystem.common.SetFloat("AudioMixerContainer", item.Key + "Pitch", item.Value.pitch);
+				archive.SetFloat("AudioMixerContainer", item.Key + "Volume", item.Value.volume);
+				archive.SetFloat("AudioMixerContainer", item.Key + "Pitch", item.Value.pitch);
 			}
+		}
+
+		private void _SetVolume(_Data data, float volume) {
+			data.volume = Mathf.Clamp01(volume);
+			var dt = 1 - data.volume;
+			var v = (1 - dt * dt) * 80 - 80;
+			data.mixer.SetFloat("volume", v);
+		}
+		private void _SetPitch(_Data data, float pitch) {
+			data.pitch = Mathf.Clamp(pitch, 0.01f, 10);
+			data.mixer.SetFloat("pitch", data.pitch);
 		}
 	}
 }

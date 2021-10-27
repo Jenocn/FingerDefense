@@ -37,6 +37,12 @@ namespace Game.Managers {
 		public float GetVolume(MixerType mixerType) {
 			return _audioMixerContainer.GetVolume(_GetMixerKeyByType(mixerType));
 		}
+		public void SetPitch(MixerType mixerType, float pitch) {
+			_audioMixerContainer.SetPitch(_GetMixerKeyByType(mixerType), pitch);
+		}
+		public float GetPitch(MixerType mixerType) {
+			return _audioMixerContainer.GetPitch(_GetMixerKeyByType(mixerType));
+		}
 
 		private string _GetMixerKeyByType(MixerType mixerType) {
 			return mixerType.GetType().GetEnumName(mixerType);
@@ -80,8 +86,6 @@ namespace Game.Managers {
 			_audioMixerContainer.AddMixer("Music", _audioMixerCollection.musicMixerGroup.audioMixer);
 			_audioMixerContainer.AddMixer("Effect", _audioMixerCollection.effectMixerGroup.audioMixer);
 			_audioMixerContainer.AddMixer("Voice", _audioMixerCollection.voiceMixerGroup.audioMixer);
-
-			_audioMixerContainer.LoadData();
 		}
 
 		public override void OnSceneUnloaded() {
@@ -89,8 +93,12 @@ namespace Game.Managers {
 			_musicContainer.StopAllChannels();
 		}
 
+		public override void OnCommonArchiveLoaded() {
+			_audioMixerContainer.LoadData(ArchiveSystem.common);
+		}
+
 		public override void OnCommonArchiveSaveBegin() {
-			_audioMixerContainer.SaveData();
+			_audioMixerContainer.SaveData(ArchiveSystem.common);
 		}
 	}
 }
