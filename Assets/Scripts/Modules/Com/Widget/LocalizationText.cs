@@ -57,7 +57,7 @@ namespace Game.Modules {
                 }
             }
 
-            var element = Strings.StringUi.instance.GetElement(_key);
+            var element = Strings.StringUi.Get(_key);
             if (!string.IsNullOrEmpty(element)) {
                 _text.text = element;
             }

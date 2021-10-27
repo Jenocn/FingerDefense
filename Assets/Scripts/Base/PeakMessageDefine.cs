@@ -17,3 +17,9 @@ public class PeakMessage_CreateBrick : MessageBase<PeakMessage_CreateBrick> {
 	public Vector2 position = Vector2.zero;
 	public int hpMax = 0;
 }
+public class PeakMessage_CreateInfiniteBrick : MessageBase<PeakMessage_CreateInfiniteBrick> {
+	public int index = 0;
+	public int brickID = 0;
+	public Vector2 position = Vector2.zero;
+	public int hpMax = 0;
+}

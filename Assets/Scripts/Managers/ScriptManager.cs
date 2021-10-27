@@ -30,7 +30,7 @@ namespace Game.Managers {
         public VirtualJourney LoadWithCache(string filename) {
             if (!_cacheVJ.TryGetValue(filename, out var jour)) {
                 jour = Load(filename);
-                if ((jour != null) && (jour.Execute())) {
+                if (jour != null) {
                     _cacheVJ.Add(filename, jour);
                 }
             }
@@ -251,7 +251,7 @@ namespace Game.Managers {
             ));
             // create_brick
             module.space.AddVariable(new peak.interpreter.Variable("create_brick", peak.interpreter.VariableAttribute.Const,
-                new peak.interpreter.ValueFunction(6, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                new peak.interpreter.ValueFunction(4, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
                     var msg = new PeakMessage_CreateBrick();
                     if (ValueTool.IsInteger(args[0])) {
                         msg.brickID = (int) ((ValueNumber) args[0]).value;
@@ -261,6 +261,27 @@ namespace Game.Managers {
                     }
                     if (ValueTool.IsInteger(args[3])) {
                         msg.hpMax = (int) ((ValueNumber) args[3]).value;
+                    }
+                    message.Send(msg);
+
+                    return ValueNull.DEFAULT_VALUE;
+                })
+            ));
+            // create_infinite_brick
+            module.space.AddVariable(new peak.interpreter.Variable("create_infinite_brick", peak.interpreter.VariableAttribute.Const,
+                new peak.interpreter.ValueFunction(5, (List<peak.interpreter.Value> args, peak.interpreter.Space space) => {
+                    var msg = new PeakMessage_CreateInfiniteBrick();
+                    if (ValueTool.IsInteger(args[0])) {
+                        msg.index = (int) ((ValueNumber) args[0]).value;
+                    }
+                    if (ValueTool.IsInteger(args[1])) {
+                        msg.brickID = (int) ((ValueNumber) args[1]).value;
+                    }
+                    if (ValueTool.IsNumber(args[2]) && ValueTool.IsNumber(args[3])) {
+                        msg.position.Set((float) ((ValueNumber) args[2]).value, (float) ((ValueNumber) args[3]).value);
+                    }
+                    if (ValueTool.IsInteger(args[4])) {
+                        msg.hpMax = (int) ((ValueNumber) args[4]).value;
                     }
                     message.Send(msg);
 

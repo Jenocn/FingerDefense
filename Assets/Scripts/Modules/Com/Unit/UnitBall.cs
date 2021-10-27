@@ -163,7 +163,11 @@ namespace Game.Modules {
             if (unitRacket.useDirection) {
                 SetDirection(_CalcDirFromRacket(unitRacket.triggerDirection));
             } else {
-                _direction.y = Mathf.Abs(_direction.y);
+                if (_direction == Vector2.zero) {
+                    _direction = Vector2.one;
+                } else {
+                    _direction.y = Mathf.Abs(_direction.y);
+                }
             }
 
             MessageCenter.Send(new MessageRacketHit(targetID.uniqueID, target.transform.position, _unitID.uniqueID));

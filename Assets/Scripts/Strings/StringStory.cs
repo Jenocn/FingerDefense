@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Game.Strings {
     public class StringStory : TableBase<StringStory, string, string> {
+        public static string Get(string key, string def = "") {
+            var element = instance.GetElement(key);
+            if (element != null) {
+                return element;
+            }
+            return def;
+        }
         public override void Load() {
             var currentInfo = LocalizationSystem.GetCurrentInfo();
             var text = AssetSystem.Load<TextAsset>("strings", "story_" + currentInfo.fileSign)?.text;

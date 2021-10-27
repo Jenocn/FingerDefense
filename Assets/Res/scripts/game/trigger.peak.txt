@@ -80,3 +80,25 @@ function brick_die(brickID, x, y, attackID, attackElementType) {
 		create_effect(EffectType.CollisionFireYellowGreen, x, y, 0.08);
 	}
 }
+
+// 无限模式生成时调用
+function infinite_generate(index, x, y) {
+	var id = 1;
+	
+	var rv = Random.Range(0, 500);
+	if (rv < 120) {
+		id = BrickType.BrickRed;
+	} else if (rv < 240) {
+		id = BrickType.BrickGreen;
+	} else if (rv < 360) {
+		id = BrickType.BrickBlue;
+	} else if (rv < 470) {
+		id = BrickType.Bomb;
+	} else {
+		id = BrickType.Spawn;
+	}
+
+	var hp = Random.Range(1, 4);
+	
+	create_infinite_brick(index, id, x, y, hp);
+}

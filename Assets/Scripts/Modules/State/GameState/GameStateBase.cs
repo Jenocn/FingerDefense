@@ -47,30 +47,30 @@ namespace Game.Modules {
 			});
 
 			MessageCenter.AddListener<MessageBallCollision>(this, (MessageBallCollision msg) => {
-				scriptManager.Execute(scriptTrigger, "ball_collision",
-					new ScriptValue(msg.ballID),
-					new ScriptValue(msg.ballPosition.x),
-					new ScriptValue(msg.ballPosition.y),
-					new ScriptValue(msg.collisionPosition.x),
-					new ScriptValue(msg.collisionPosition.y));
+				scriptTrigger.ExecuteFunction("ball_collision",
+					new peak.interpreter.ValueNumber(msg.ballID),
+					new peak.interpreter.ValueNumber(msg.ballPosition.x),
+					new peak.interpreter.ValueNumber(msg.ballPosition.y),
+					new peak.interpreter.ValueNumber(msg.collisionPosition.x),
+					new peak.interpreter.ValueNumber(msg.collisionPosition.y));
 			});
 
 			MessageCenter.AddListener<MessageBrickHit>(this, (MessageBrickHit msg) => {
 
-				scriptManager.Execute(scriptTrigger, "brick_hit",
-					new ScriptValue(msg.uniqueID),
-					new ScriptValue(msg.position.x),
-					new ScriptValue(msg.position.y),
-					new ScriptValue(msg.attackID),
-					new ScriptValue((int) msg.attackElementType));
+				scriptTrigger.ExecuteFunction("brick_hit",
+					new peak.interpreter.ValueNumber(msg.uniqueID),
+					new peak.interpreter.ValueNumber(msg.position.x),
+					new peak.interpreter.ValueNumber(msg.position.y),
+					new peak.interpreter.ValueNumber(msg.attackID),
+					new peak.interpreter.ValueNumber((int) msg.attackElementType));
 
 				if (msg.damageResult.bDie) {
-					scriptManager.Execute(scriptTrigger, "brick_die",
-						new ScriptValue(msg.uniqueID),
-						new ScriptValue(msg.position.x),
-						new ScriptValue(msg.position.y),
-						new ScriptValue(msg.attackID),
-						new ScriptValue((int) msg.attackElementType));
+					scriptTrigger.ExecuteFunction("brick_die",
+						new peak.interpreter.ValueNumber(msg.uniqueID),
+						new peak.interpreter.ValueNumber(msg.position.x),
+						new peak.interpreter.ValueNumber(msg.position.y),
+						new peak.interpreter.ValueNumber(msg.attackID),
+						new peak.interpreter.ValueNumber((int) msg.attackElementType));
 				}
 
 				++hitCount;
@@ -113,7 +113,7 @@ namespace Game.Modules {
 				new ScriptValue(mapManager.currentID));
 
 			controller.CountDown(3, () => {
-				controller.CreateBall(1, new Vector2(0, -2), Vector2.one, 0);
+				controller.CreateBall(1, new Vector2(0, -2), Vector2.zero, 0);
 			});
 		}
 

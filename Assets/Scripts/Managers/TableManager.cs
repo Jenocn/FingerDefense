@@ -7,6 +7,7 @@ namespace Game.Managers {
         private TableContainer _container = new TableContainer();
 
         public override void OnInitManager() {
+            _container.Push(TableConfig.instance);
             _container.Push(TableMapdat.instance);
             _container.Load();
         }
