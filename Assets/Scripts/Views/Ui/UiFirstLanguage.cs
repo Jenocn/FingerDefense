@@ -8,6 +8,7 @@ using UnityUiModel;
 
 namespace Game.Views {
 	public class UiFirstLanguage : UiModel {
+		private bool _bOK = false;
 		public override void OnInitUI() {
 			var prefab = AssetSystem.Load<GameObject>("prefabs", "UiFirstLanguage");
 			if (!prefab) {
@@ -37,8 +38,12 @@ namespace Game.Views {
 						GameApplication.SaveCommonArchive();
 					});
 				}
+				_bOK = true;
+			}
+		}
 
-			} else {
+		public override void OnStartUI() {
+			if (!_bOK) {
 				PopThisUI();
 			}
 		}

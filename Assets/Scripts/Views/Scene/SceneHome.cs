@@ -22,11 +22,11 @@ namespace Game.Views {
                 _uiStack.PushUI<UiStart>();
                 _bTag = true;
 
-                GameApplication.LoadArchive(ArchiveIndex);
-            }
+                if (GameApplication.isFirstOpen) {
+                    _uiStack.PushUI<UiFirstLanguage>();
+                }
 
-            if (GameApplication.isFirstOpen) {
-                _uiStack.PushUI<UiFirstLanguage>();
+                GameApplication.LoadArchive(ArchiveIndex);
             }
 
             MessageCenter.AddListener<UiMessage_OnButtonRankMode>(this, (UiMessage_OnButtonRankMode msg) => {
