@@ -21,13 +21,17 @@ namespace Game.Managers {
             if (string.IsNullOrEmpty(extname)) {
                 filename = filename + ".peak";
             }
-            return VirtualMachine.LoadFile(filename);
+            var vj = VirtualMachine.LoadFile(filename);
+            if ((vj != null) && vj.Execute()) {
+                return vj;
+            }
+            return null;
         }
 
         public VirtualJourney LoadWithCache(string filename) {
             if (!_cacheVJ.TryGetValue(filename, out var jour)) {
                 jour = Load(filename);
-                if (jour != null) {
+                if ((jour != null) && (jour.Execute())) {
                     _cacheVJ.Add(filename, jour);
                 }
             }
@@ -63,7 +67,7 @@ namespace Game.Managers {
         }
 
         public ScriptValue Execute(VirtualJourney journey, string functionName, List<ScriptValue> args) {
-            if ((journey != null) && journey.Execute()) {
+            if (journey != null) {
                 var tempArgs = new List<peak.interpreter.Value>();
                 for (var i = 0; i < args.Count; ++i) {
                     tempArgs.Add(args[i] ? args[i].value : ScriptValue.NULL.value);
@@ -73,7 +77,7 @@ namespace Game.Managers {
             return ScriptValue.NULL;
         }
         public ScriptValue Execute(VirtualJourney journey, string functionName, params ScriptValue[] args) {
-            if ((journey != null) && journey.Execute()) {
+            if (journey != null) {
                 var tempArgs = new List<peak.interpreter.Value>();
                 for (var i = 0; i < args.Length; ++i) {
                     tempArgs.Add(args[i] ? args[i].value : ScriptValue.NULL.value);
@@ -83,7 +87,7 @@ namespace Game.Managers {
             return ScriptValue.NULL;
         }
         public ScriptValue Execute(VirtualJourney journey, string functionName) {
-            if ((journey != null) && journey.Execute()) {
+            if (journey != null) {
                 return new ScriptValue(journey.ExecuteFunction(functionName));
             }
             return ScriptValue.NULL;

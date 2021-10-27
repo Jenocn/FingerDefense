@@ -20,9 +20,10 @@ namespace Game.Modules {
 		public override void OnGameControllerEvent(GameController.Event e) {
 			if (e == GameController.Event.BallZero) {
 				controller.Stop();
+				bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
 				MessageCenter.Send(new MessageGameOver(
 					mapManager.mapMode, mapManager.currentID,
-					scoreManager.score, highHitCount, false, false));
+					scoreManager.score, highHitCount, false, bHighest));
 			}
 		}
 		public override void OnGamePause(bool bPause) {

@@ -18,9 +18,10 @@ namespace Game.Modules {
 			if (e == GameController.Event.BrickZero) {
 				controller.Stop();
 				if (_index >= _normalIDs.Count) {
+					bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
 					MessageCenter.Send(new MessageGameOver(
 						mapManager.mapMode, mapManager.currentID,
-						scoreManager.score, highHitCount, false, false));
+						scoreManager.score, highHitCount, true, bHighest));
 				} else {
 					controller.CountDown(3, () => {
 						_Generate();
@@ -30,14 +31,13 @@ namespace Game.Modules {
 			} else if (e == GameController.Event.BallZero) {
 				controller.Stop();
 
+				bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
 				MessageCenter.Send(new MessageGameOver(
 					mapManager.mapMode, mapManager.currentID,
-					scoreManager.score, highHitCount, false, false));
+					scoreManager.score, highHitCount, false, bHighest));
 			}
 		}
-		public override void OnGamePause(bool bPause) {
-			
-		}
+		public override void OnGamePause(bool bPause) {}
 
 		private bool _Generate() {
 			for (var i = _index; i < _normalIDs.Count; ++i) {

@@ -9,6 +9,7 @@ namespace Game.Systems {
 	/// 存档管理系统
 	/// </summary>
 	public static class ArchiveSystem {
+		public static LogSystem.Logger logger { get; private set; } = null;
 		private static string _rootPath = "user/savedata";
 		private static string _extname = ".dat";
 		private static string _archiveNameOfIndex = "archive";
@@ -29,6 +30,10 @@ namespace Game.Systems {
 			}
 		}
 		public static Archive current { get => _current; }
+
+		static ArchiveSystem() {
+			logger = LogSystem.GetLogger("Archive");
+		}
 
 		/// <summary>
 		/// 初始化
@@ -212,10 +217,12 @@ namespace Game.Systems {
 				if (File.Exists(filename)) {
 					var data = File.ReadAllText(filename, System.Text.Encoding.UTF8);
 					ReadData(data);
+					logger.Log(Name + " loaded!");
 				}
 			}
 			public void Save() {
 				WriteData(_data);
+				logger.Log(Name + " saved!");
 			}
 			public void Delete() {
 				var filename = PathTool.Join(ArchiveSystem.GetRootPath(), Name + ArchiveSystem.GetExtname());

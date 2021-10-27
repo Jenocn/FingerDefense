@@ -1,4 +1,10 @@
 {
+    "UiGameOver_Combo": "-连击-",
+    "UiGameOver_Score": "-得分-",
+    "UiGameOver_New": "-新纪录-",
+    "UiGameOver_Again": "再来",
+    "UiGameOver_Back": "返回",
+    "UiGameOver_Title": "成绩",
     "UiGameNormal_Score": "分数:",
     "UiPause_Title": "暂停",
     "UiPause_Back": "退出",

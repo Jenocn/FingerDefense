@@ -24,11 +24,16 @@ namespace Game.Views {
                 SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
             });
             MessageCenter.AddListener<MessageGameOver>(this, (MessageGameOver msg) => {
-                if (msg.bWined) {
-                    var ui = _uiStack.PushUI<UiGameWined>();
-                    ui.ShowData(msg.score, msg.highHitCount, msg.bHighestScore);
+                if (msg.mapMode == MapMode.Classic) {
+                    if (msg.bWined) {
+                        var ui = _uiStack.PushUI<UiGameWined>();
+                        ui.ShowData(msg.score, msg.highHitCount, msg.bHighestScore);
+                    } else {
+                        _uiStack.PushUI<UiGameFailed>();
+                    }
                 } else {
-                    _uiStack.PushUI<UiGameFailed>();
+                    var ui = _uiStack.PushUI<UiGameOver>();
+                    ui.ShowData(msg.score, msg.highHitCount, msg.bHighestScore);
                 }
 
                 GameApplication.SaveArchive();

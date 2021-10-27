@@ -28,9 +28,7 @@ namespace Game.Modules {
 					scoreManager.score, highHitCount, false, false));
 			}
 		}
-		public override void OnGamePause(bool bPause) {
-			
-		}
+		public override void OnGamePause(bool bPause) {}
 
 		public override void OnStateCreate() {
 			base.OnStateCreate();
