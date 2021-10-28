@@ -69,7 +69,7 @@ namespace Game.Views {
             ui.Find("ButtonDown").GetComponent<Button>().onClick.AddListener(() => {
                 _ShowNextPage();
             });
-            _ShowPage(0);
+            _ShowPage(_mapManager.classicPage);
         }
 
         private void _OnSelect(Item item) {
@@ -82,6 +82,7 @@ namespace Game.Views {
             }
 
             _currentPage = page;
+            _mapManager.SetClassicPage(_currentPage);
 
             var index0 = page * _items.Count;
             for (var i = 0; i < _items.Count; ++i) {

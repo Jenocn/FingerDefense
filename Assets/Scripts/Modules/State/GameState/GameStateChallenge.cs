@@ -23,7 +23,7 @@ namespace Game.Modules {
 						mapManager.mapMode, mapManager.currentID,
 						scoreManager.score, highHitCount, true, bHighest));
 				} else {
-					controller.CountDown(3, () => {
+					controller.CountDown(2, () => {
 						_Generate();
 						controller.Run();
 					});

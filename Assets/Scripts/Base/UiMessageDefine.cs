@@ -7,6 +7,7 @@ public class UiMessage_OnButtonChallengeMode : MessageBase<UiMessage_OnButtonCha
 
 public class UiMessage_OnButtonGameAgain : MessageBase<UiMessage_OnButtonGameAgain> {}
 public class UiMessage_OnButtonGameBack : MessageBase<UiMessage_OnButtonGameBack> {}
+public class UiMessage_OnButtonGameNextLevel : MessageBase<UiMessage_OnButtonGameNextLevel> {}
 public class UiMessage_OnClassicLevelSelect : MessageBase<UiMessage_OnClassicLevelSelect> {
 	public UiMessage_OnClassicLevelSelect(int mapID) {
 		this.mapID = mapID;

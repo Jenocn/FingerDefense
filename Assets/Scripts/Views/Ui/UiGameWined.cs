@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Managers;
 using Game.Systems;
 using GCL.Pattern;
 using UnityEngine;
@@ -20,9 +21,12 @@ namespace Game.Views {
             ui.Find("ButtonBack").GetComponent<Button>().onClick.AddListener(() => {
                 MessageCenter.Send(new UiMessage_OnButtonGameBack());
             });
-            ui.Find("ButtonAgain").GetComponent<Button>().onClick.AddListener(() => {
-                MessageCenter.Send(new UiMessage_OnButtonGameAgain());
+            var buttonNext = ui.Find("ButtonNext");
+            buttonNext.GetComponent<Button>().onClick.AddListener(() => {
+                MessageCenter.Send(new UiMessage_OnButtonGameNextLevel());
             });
+            buttonNext.gameObject.SetActive(ManagerCenter.GetManager<MapManager>().HasClassicNext());
+
             _textScoreHigh = ui.Find("TextScoreHigh").GetComponent<Text>();
             _textScore = ui.Find("TextScore").GetComponent<Text>();
             _textComboHit = ui.Find("TextComboHit").GetComponent<Text>();

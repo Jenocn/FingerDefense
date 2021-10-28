@@ -31,6 +31,10 @@ namespace Game.Views {
                     SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
                 }
             });
+            MessageCenter.AddListener<UiMessage_OnButtonGameNextLevel>(this, (UiMessage_OnButtonGameNextLevel msg) => {
+                _mapManager.SetCurrentNext();
+                SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            });
             MessageCenter.AddListener<MessageGameOver>(this, (MessageGameOver msg) => {
                 if (msg.mapMode == MapMode.Classic) {
                     if (msg.bWined) {
@@ -51,6 +55,7 @@ namespace Game.Views {
         private void OnDestroy() {
             MessageCenter.RemoveListener<UiMessage_OnButtonGameAgain>(this);
             MessageCenter.RemoveListener<UiMessage_OnButtonGameBack>(this);
+            MessageCenter.RemoveListener<UiMessage_OnButtonGameNextLevel>(this);
             MessageCenter.RemoveListener<MessageGameOver>(this);
         }
     }

@@ -449,7 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0db2a521a9b7a44921fba0caea764c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _key: UiWined_Again
+  _key: UiWined_Next
   _useConfig: 1
 --- !u!1 &2944971661288731618
 GameObject:
@@ -892,7 +892,7 @@ GameObject:
   - component: {fileID: 6660544329399328948}
   - component: {fileID: 3641806745061806981}
   m_Layer: 5
-  m_Name: ButtonAgain
+  m_Name: ButtonNext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

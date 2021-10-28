@@ -112,7 +112,7 @@ namespace Game.Modules {
 				new ScriptValue((int) mapManager.mapMode),
 				new ScriptValue(mapManager.currentID));
 
-			controller.CountDown(3, () => {
+			controller.CountDown(2, () => {
 				controller.CreateBall(1, new Vector2(0, -2), Vector2.zero, 0);
 			});
 		}

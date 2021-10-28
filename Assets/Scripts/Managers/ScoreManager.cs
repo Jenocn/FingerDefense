@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace Game.Managers {
 	public class ScoreManager : ManagerBase<ScoreManager> {
-
 		private const int SCORE_MAX = 999999999;
 		public int score { get; private set; } = 0;
 		private ScriptManager _scriptManager = null;
 		private peak.VirtualJourney _vj = null;
 		private Dictionary<int, int> _classicHighestScoreDict = new Dictionary<int, int>();
+		public Dictionary<int, int> classicHighestScoreDict { get => _classicHighestScoreDict; }
 		private int _infiniteHighestScore = 0;
 		private int _challengeHighestScore = 0;
 
