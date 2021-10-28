@@ -86,6 +86,7 @@ namespace Game.Managers {
 			_audioMixerContainer.AddMixer("Music", _audioMixerCollection.musicMixerGroup.audioMixer);
 			_audioMixerContainer.AddMixer("Effect", _audioMixerCollection.effectMixerGroup.audioMixer);
 			_audioMixerContainer.AddMixer("Voice", _audioMixerCollection.voiceMixerGroup.audioMixer);
+			_audioMixerContainer.LoadData(ArchiveSystem.common);
 		}
 
 		public override void OnSceneUnloaded() {
@@ -94,7 +95,6 @@ namespace Game.Managers {
 		}
 
 		public override void OnCommonArchiveLoaded() {
-			_audioMixerContainer.LoadData(ArchiveSystem.common);
 		}
 
 		public override void OnCommonArchiveSaveBegin() {

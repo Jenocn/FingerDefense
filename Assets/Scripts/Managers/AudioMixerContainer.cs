@@ -17,7 +17,6 @@ namespace Game.Managers {
 		public void AddMixer(string key, AudioMixer mixer) {
 			var data = new _Data();
 			data.mixer = mixer;
-			data.volume = 1;
 			_datas.Add(key, data);
 		}
 		public void RemoveMixer(string key) {

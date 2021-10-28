@@ -25,80 +25,69 @@ namespace Game.Views {
 
         private Vector2 _min = Vector2.zero;
         private Vector2 _max = Vector2.zero;
+        private Rect _contentRect = new Rect();
         private Vector2 _size = Vector2.zero;
 
         private Dictionary<int, _Data> _dataMap = new Dictionary<int, _Data>();
 
         private InputField _inputFilename = null;
-        private InputField _inputGrid = null;
         private InputField _inputTypeID = null;
         private InputField _inputHp = null;
 
         public override void OnInitUI() {
             var prefab = AssetSystem.Load<GameObject>("prefabs", "UiEditorMap");
-            if (prefab) {
-                var ui = InstantiateUI(prefab).transform;
+            var ui = InstantiateUI(prefab).transform;
 
-                ui.Find("ButtonOpen")?.GetComponent<Button>().onClick.AddListener(() => {
-                    _LoadFromFile(_inputFilename.text);
-                });
-                ui.Find("ButtonSave")?.GetComponent<Button>().onClick.AddListener(() => {
-                    _SaveToFile(_inputFilename.text);
-                });
-                ui.Find("ButtonClear")?.GetComponent<Button>().onClick.AddListener(() => {
-                    _Clear();
-                });
-                ui.Find("ButtonGrid")?.GetComponent<Button>().onClick.AddListener(() => {
-                    var text = _inputGrid.text;
-                    if (string.IsNullOrEmpty(text)) {
-                        return;
-                    }
-                    var chs = text.Split('x', ',');
-                    if (chs.Length != 2) {
-                        return;
-                    }
-                    if (!int.TryParse(chs[0], out var x)) {
-                        return;
-                    }
-                    if (!int.TryParse(chs[1], out var y)) {
-                        return;
-                    }
-                    _grid.Set(x, y);
-                });
-                _inputFilename = ui.Find("InputFieldFilename")?.GetComponent<InputField>();
-                _inputGrid = ui.Find("InputFieldGrid")?.GetComponent<InputField>();
-                _inputTypeID = ui.Find("InputFieldTypeID")?.GetComponent<InputField>();
-                _inputHp = ui.Find("InputFieldHp")?.GetComponent<InputField>();
-            }
+            ui.Find("ButtonOpen")?.GetComponent<Button>().onClick.AddListener(() => {
+                _LoadFromFile(_inputFilename.text);
+            });
+            ui.Find("ButtonSave")?.GetComponent<Button>().onClick.AddListener(() => {
+                _SaveToFile(_inputFilename.text);
+            });
+            ui.Find("ButtonClear")?.GetComponent<Button>().onClick.AddListener(() => {
+                _Clear();
+            });
+            _inputFilename = ui.Find("InputFieldFilename")?.GetComponent<InputField>();
+            _inputTypeID = ui.Find("InputFieldTypeID")?.GetComponent<InputField>();
+            _inputHp = ui.Find("InputFieldHp")?.GetComponent<InputField>();
 
             _min = Camera.main.ScreenToWorldPoint(Vector3.zero);
             _max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
             _size = _max - _min;
+            _contentRect.Set(_min.x, _min.y + _size.y * 0.5f, _size.x, _size.y * 0.5f);
+            _Clear();
         }
 
         private void Update() {
-            if (Input.GetMouseButtonDown(0)) {
-                if (Input.mousePosition.y >= Screen.height * 0.5f) {
-                    var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // create
+            bool button0 = Input.GetMouseButton(0);
+            // remove
+            bool button1 = Input.GetMouseButton(1);
+            if (button0 || button1) {
+                var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (_contentRect.Contains(pos)) {
                     pos.z = 0;
                     var data = _GetDataFromPosition(pos);
                     if (null == data) {
                         return;
                     }
                     if (data.handleObject) {
-                        BrickFactory.Delete(data.handleObject);
-                        data.handleObject = null;
-                        data.id = 0;
-                        data.hpMax = 0;
+                        if (button1) {
+                            BrickFactory.Delete(data.handleObject);
+                            _RemoveData(data);
+                            return;
+                        }
                     } else {
-                        if (int.TryParse(_inputTypeID.text.Trim(), out var typeID)) {
-                            data.id = typeID;
-                            if (int.TryParse(_inputHp.text.Trim(), out var hpMax)) {
-                                data.hpMax = hpMax;
-                            } else {
-                                data.hpMax = 1;
+                        if (button0) {
+                            if (int.TryParse(_inputTypeID.text.Trim(), out var typeID)) {
+                                data.id = typeID;
+                                if (int.TryParse(_inputHp.text.Trim(), out var hpMax)) {
+                                    data.hpMax = hpMax;
+                                } else {
+                                    data.hpMax = 1;
+                                }
+                                data.handleObject = BrickFactory.Create(data.id, data.hpMax, data.position, null)?.gameObject;
                             }
-                            data.handleObject = BrickFactory.Create(data.id, data.hpMax, data.position, null)?.gameObject;
                         }
                     }
                 }
@@ -106,9 +95,6 @@ namespace Game.Views {
         }
 
         private void OnRenderObject() {
-            _gridSize.x = _size.x / _grid.x;
-            _gridSize.y = _size.y / _grid.y;
-
             var begin = Vector3.zero;
             var end = Vector3.zero;
             for (int i = 0; i < _grid.x - 1; ++i) {
@@ -121,8 +107,16 @@ namespace Game.Views {
                 float y = _min.y + _gridSize.y * (i + 1);
                 begin.Set(_min.x, y, transform.position.z);
                 end.Set(_max.x, y, transform.position.z);
-                UnityUtility.DrawLine(begin, end, Color.white);
+
+                if (i % 4 == 0) {
+                    UnityUtility.DrawLine(begin, end, Color.green);
+                } else {
+                    UnityUtility.DrawLine(begin, end, Color.white);
+                }
             }
+            begin.Set(Mathf.Lerp(_min.x, _max.x, 0.5f), _min.y, transform.position.z);
+            end.Set(Mathf.Lerp(_min.x, _max.x, 0.5f), _max.y, transform.position.z);
+            UnityUtility.DrawLine(begin, end, Color.green);
         }
 
         private _Data _GetDataFromPosition(Vector2 pos) {
@@ -151,14 +145,35 @@ namespace Game.Views {
             return data;
         }
 
+        private void _RemoveData(_Data data) {
+            _dataMap.Remove(data.index);
+        }
+
         private void _Clear() {
-            _inputGrid.text = "1x1";
             foreach (var item in _dataMap) {
                 if (item.Value.handleObject) {
                     BrickFactory.Delete(item.Value.handleObject);
                 }
             }
             _dataMap.Clear();
+
+            _grid.Set(20, 34);
+
+            _gridSize.x = _size.x / _grid.x;
+            _gridSize.y = _size.y / _grid.y;
+        }
+
+        private void _ClearOutOfContent() {
+            var removeList = new LinkedList<int>();
+            foreach (var item in _dataMap) {
+                if (!_contentRect.Contains(item.Value.position)) {
+                    BrickFactory.Delete(item.Value.handleObject);
+                    removeList.AddLast(item.Key);
+                }
+            }
+            foreach (var item in removeList) {
+                _dataMap.Remove(item);
+            }
         }
 
         private void _LoadFromFile(string filename) {
@@ -173,7 +188,6 @@ namespace Game.Views {
                 return;
             }
             _grid = element.gird;
-            _inputGrid.text = _grid.x + "x" + _grid.y;
             foreach (var item in element.items) {
                 var data = new _Data();
                 data.index = item.index;
@@ -186,6 +200,8 @@ namespace Game.Views {
         }
 
         private void _SaveToFile(string filename) {
+            _ClearOutOfContent();
+
             if (_dataMap.Count == 0) {
                 return;
             }
@@ -227,9 +243,18 @@ namespace Game.Views {
             if (!Directory.Exists(DIRECTORY_MAPDATA)) {
                 Directory.CreateDirectory(DIRECTORY_MAPDATA);
             }
-            File.WriteAllText(DIRECTORY_MAPDATA + filename + ".json", ret);
+            var srcFilename = DIRECTORY_MAPDATA + filename + ".json";
+            File.WriteAllText(srcFilename, ret);
+            File.Copy(srcFilename, ASSET_MAPDATA + filename + ".json", true);
+            Debug.Log("saved!");
         }
 
+#if UNITY_EDITOR
         private const string DIRECTORY_MAPDATA = "user/mapdata/";
+        private const string ASSET_MAPDATA = "Assets/Res/mapdata/";
+#else
+        private const string DIRECTORY_MAPDATA = "../user/mapdata/";
+        private const string ASSET_MAPDATA = "../Assets/Res/mapdata/";
+#endif
     }
 }

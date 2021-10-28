@@ -81,6 +81,8 @@ namespace Game.Views {
                 return;
             }
 
+            _currentPage = page;
+
             var index0 = page * _items.Count;
             for (var i = 0; i < _items.Count; ++i) {
                 var item = _items[i];

@@ -1,12 +1,1 @@
-[
-	{
-		"id":1,
-		"file":"map001",
-		"info":"..."
-	},
-	{
-		"id":2,
-		"file":"map002",
-		"info":"..."
-	}
-]
+[{"id": 1, "file": "map001", "info": ""}, {"id": 2, "file": "map002", "info": ""}, {"id": 3, "file": "map003", "info": ""}, {"id": 4, "file": "map004", "info": ""}, {"id": 5, "file": "map005", "info": ""}, {"id": 6, "file": "map006", "info": ""}, {"id": 7, "file": "map007", "info": ""}, {"id": 8, "file": "map008", "info": ""}, {"id": 9, "file": "map009", "info": ""}, {"id": 10, "file": "map010", "info": ""}, {"id": 11, "file": "map011", "info": ""}, {"id": 12, "file": "map012", "info": ""}, {"id": 13, "file": "map013", "info": ""}, {"id": 14, "file": "map014", "info": ""}, {"id": 15, "file": "map015", "info": ""}, {"id": 16, "file": "map016", "info": ""}, {"id": 17, "file": "map017", "info": ""}, {"id": 18, "file": "map018", "info": ""}, {"id": 19, "file": "map019", "info": ""}, {"id": 20, "file": "map020", "info": ""}, {"id": 21, "file": "map021", "info": ""}, {"id": 22, "file": "map022", "info": ""}, {"id": 23, "file": "map023", "info": ""}, {"id": 24, "file": "map024", "info": ""}, {"id": 25, "file": "map025", "info": ""}]
