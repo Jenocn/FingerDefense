@@ -11,9 +11,12 @@ namespace Game.Views {
     public class SceneGame : MonoBehaviour {
 
         private UiStack _uiStack = null;
+        private MapManager _mapManager = null;
 
         // Start is called before the first frame update
         void Start() {
+            _mapManager = ManagerCenter.GetManager<MapManager>();
+
             _uiStack = GetComponent<UiStack>();
             _uiStack.PushUI<UiGameNormal>();
 
@@ -21,7 +24,12 @@ namespace Game.Views {
                 SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
             });
             MessageCenter.AddListener<UiMessage_OnButtonGameBack>(this, (UiMessage_OnButtonGameBack msg) => {
-                SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
+                var mapMode = _mapManager.mapMode;
+                if (mapMode == MapMode.Classic) {
+                    SceneManager.LoadScene("LevelSelectScene", LoadSceneMode.Single);
+                } else {
+                    SceneManager.LoadScene("HomeScene", LoadSceneMode.Single);
+                }
             });
             MessageCenter.AddListener<MessageGameOver>(this, (MessageGameOver msg) => {
                 if (msg.mapMode == MapMode.Classic) {

@@ -33,6 +33,13 @@
 		posY: 坐标Y
 		delay: 创建延迟
 	create_effect(effectID, posX, posY, delay);
+---------------------------------------------
+	无限模式创建砖块:
+		index: 序号
+		brickID: 砖块ID
+		posX,posY: 坐标
+		hpMax: 生命值
+	create_infinite_brick(index, brickID, posX, posY, hpMax);
 ******************************************************/
 
 import "Unity";
@@ -45,6 +52,11 @@ import "Game";
 
 // 首页加载完成
 function home_loaded() {
+	music(MusicChannelType.BGM, "music_battle_001", 1, true);
+}
+
+// 关卡选择加载完成
+function level_select_loaded() {
 	music(MusicChannelType.BGM, "music_battle_001", 1, true);
 }
 

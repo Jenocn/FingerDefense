@@ -61,7 +61,7 @@ namespace Game.Views {
             }
 
             ui.Find("ButtonBack").GetComponent<Button>().onClick.AddListener(() => {
-                PopThisUI();
+                MessageCenter.Send(new UiMessage_OnButtonGameBack());
             });
             ui.Find("ButtonUp").GetComponent<Button>().onClick.AddListener(() => {
                 _ShowPrevPage();
