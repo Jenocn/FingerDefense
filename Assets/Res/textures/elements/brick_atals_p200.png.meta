@@ -90,6 +90,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -430,6 +431,19 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      brick_atals_p200_8: -2425593635664897642
+      brick_atals_p200_3: -5895460876081152933
+      brick_atals_p200_2: 1495642012494673684
+      brick_atals_p200_10: 2994738093354794833
+      brick_atals_p200_1: 441429872136558457
+      brick_atals_p200_9: -4443955971055192089
+      brick_atals_p200_11: 6485346017527777766
+      brick_atals_p200_4: -8490346059057683276
+      brick_atals_p200_6: 3918711553163819911
+      brick_atals_p200_7: 7826872454992445515
+      brick_atals_p200_0: 9043685742895155220
+      brick_atals_p200_5: 8886215585033900947
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
