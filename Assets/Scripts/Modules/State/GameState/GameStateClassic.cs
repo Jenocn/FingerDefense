@@ -15,6 +15,7 @@ namespace Game.Modules {
 				controller.Stop();
 
 				bool bHighest = scoreManager.OverScore(mapManager.mapMode, mapManager.currentID);
+				mapManager.SetNextMapClassicLocked(mapManager.currentID, false);
 				MessageCenter.Send(new MessageGameOver(
 					mapManager.mapMode,
 					mapManager.currentID,

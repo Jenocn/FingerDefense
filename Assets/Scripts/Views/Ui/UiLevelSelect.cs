@@ -16,6 +16,7 @@ namespace Game.Views {
             public Button button = null;
             public Text textIndex = null;
             public Text textRank = null;
+            public Transform panelLock = null;
         }
 
         private MapManager _mapManager = null;
@@ -57,6 +58,7 @@ namespace Game.Views {
                 item.textIndex = item.transform.Find("TextIndex").GetComponent<Text>();
                 item.textIndex.text = i.ToString();
                 item.textRank = item.transform.Find("TextRank").GetComponent<Text>();
+                item.panelLock = item.transform.Find("PanelLock");
                 _items.Add(item);
             }
 
@@ -73,7 +75,9 @@ namespace Game.Views {
         }
 
         private void _OnSelect(Item item) {
-            MessageCenter.Send(new UiMessage_OnClassicLevelSelect(item.id));
+            if (!_mapManager.IsClassicLocked(item.id)) {
+                MessageCenter.Send(new UiMessage_OnClassicLevelSelect(item.id));
+            }
         }
         private void _ShowPage(int page) {
             page = Mathf.Clamp(page, 0, _maxPage);
@@ -92,9 +96,10 @@ namespace Game.Views {
                 if (index0 < _normalIDs.Count) {
                     var mapID = _normalIDs[index0];
                     item.id = mapID;
-                    item.transform.gameObject.SetActive(true);
                     var star = Mathf.Clamp(_scoreManager.GetClassicStar(mapID), 0, 3);
                     item.textRank.text = _starList[star];
+                    item.panelLock.gameObject.SetActive(_mapManager.IsClassicLocked(mapID));
+                    item.transform.gameObject.SetActive(true);
                 } else {
                     item.transform.gameObject.SetActive(false);
                 }
