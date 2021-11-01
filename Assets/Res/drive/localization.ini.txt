@@ -1,7 +1,15 @@
-[CHS]
+[zh-chs]
 FileSign=chs
 Show=简体中文
 
-[ENG]
-FileSign=eng
+[zh-cht]
+FileSign=cht
+Show=繁體中文
+
+[en]
+FileSign=en
 Show=English
+
+[ja]
+FileSign=ja
+Show=日本語

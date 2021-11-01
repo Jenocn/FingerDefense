@@ -31,16 +31,9 @@ namespace Game.Systems {
 				_infoList.Add(info);
 			}
 
-			if (_infoList.Count == 0) {
-				var info = new Info();
-				info.key = "CHS";
-				info.fileSign = "chs";
-				_infoList.Add(info);
-			}
-
 			DEFAULT_INFO = _infoList[0];
 
-			var key = ArchiveSystem.common.GetString("LocalizationSystem", "Language", "CHS");
+			var key = ArchiveSystem.common.GetString("LocalizationSystem", "Language", DEFAULT_INFO.key);
 
 			var index = _infoList.FindIndex((Info value) => {
 				return value.key == key;

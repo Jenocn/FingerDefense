@@ -41,19 +41,15 @@ namespace Game.Modules {
                             if (_saveFont.name == config.srcFont.name) {
                                 _text.font = config.destFont;
                             }
-                            _text.fontSize = (int) (_text.fontSize * config.fontSizePercent);
+                            _text.fontSize = (int) (_saveSize * config.fontSizePercent);
                             _bChange = true;
                             break;
                         }
                     }
                 } else {
-                    if (_bChange) {
-                        _bChange = false;
-                        if (LocalizationSystem.GetCurrentInfo().key == LocalizationSystem.DEFAULT_INFO.key) {
-                            _text.font = _saveFont;
-                            _text.fontSize = _saveSize;
-                        }
-                    }
+                    _bChange = false;
+                    _text.font = _saveFont;
+                    _text.fontSize = _saveSize;
                 }
             }
 

@@ -29,7 +29,7 @@ namespace Game.Views {
 					button.Find("Text").GetComponent<Text>().text = info.show;
 
 					float sizeY = button.sizeDelta.y + padding;
-					button.localPosition = new Vector3(0, i * sizeY - sizeY * 0.5f * count, 0);
+					button.localPosition = new Vector3(0, (count - i - 1) * sizeY - sizeY * 0.5f * count, 0);
 
 					var index = i;
 					button.GetComponent<Button>().onClick.AddListener(() => {
