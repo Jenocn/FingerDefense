@@ -1,4 +1,8 @@
 {
+    "UiHome_InfiniteTip":"继续游玩经典模式解锁",
+    "UiHome_ChallengeTip":"继续游玩经典模式解锁",
+    "UiHome_Lock": "锁定",
+    "UiLevelSelect_LockTip": "通过上一关解锁",
     "UiLevelSelect_Lock": "锁定",
     "UiLevelSelect_Title": "关卡选择",
     "UiLevelSelect_Back": "返回",

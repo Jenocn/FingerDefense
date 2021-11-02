@@ -54,6 +54,20 @@ namespace Game.Managers {
             return true;
         }
 
+        public bool IsInfiniteLocked() {
+            if (_normalIDs.Count > 4) {
+                return IsClassicLocked(_normalIDs[4]);
+            }
+            return false;
+        }
+
+        public bool IsChallengeLocked() {
+            if (_normalIDs.Count > 9) {
+                return IsClassicLocked(_normalIDs[9]);
+            }
+            return false;
+        }
+
         public void SetClassicLocked(int mapID, bool bLocked) {
             if (_mapLockDict.ContainsKey(mapID)) {
                 _mapLockDict[mapID] = bLocked;

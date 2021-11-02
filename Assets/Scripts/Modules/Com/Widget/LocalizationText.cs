@@ -13,7 +13,6 @@ namespace Game.Modules {
 
         private Font _saveFont = null;
         private int _saveSize = 0;
-        private bool _bChange = false;
 
         private void Awake() {
             _text = GetComponent<Text>();
@@ -42,12 +41,10 @@ namespace Game.Modules {
                                 _text.font = config.destFont;
                             }
                             _text.fontSize = (int) (_saveSize * config.fontSizePercent);
-                            _bChange = true;
                             break;
                         }
                     }
                 } else {
-                    _bChange = false;
                     _text.font = _saveFont;
                     _text.fontSize = _saveSize;
                 }

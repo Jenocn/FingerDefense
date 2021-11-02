@@ -75,7 +75,9 @@ namespace Game.Views {
         }
 
         private void _OnSelect(Item item) {
-            if (!_mapManager.IsClassicLocked(item.id)) {
+            if (_mapManager.IsClassicLocked(item.id)) {
+                uiStack.PushUI<UiTip>().ShowText(Strings.StringUi.Get("UiLevelSelect_LockTip"));
+            } else {
                 MessageCenter.Send(new UiMessage_OnClassicLevelSelect(item.id));
             }
         }

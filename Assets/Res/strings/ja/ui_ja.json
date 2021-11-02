@@ -1,4 +1,8 @@
 {
+    "UiHome_InfiniteTip":"ロックを解除するには、クラシックモードをプレイしてください.",
+    "UiHome_ChallengeTip":"ロックを解除するには、クラシックモードをプレイしてください.",
+    "UiHome_Lock": "アンカー",
+    "UiLevelSelect_LockTip": "前のレベルでロックを解除します.",
     "UiLevelSelect_Lock": "アンカー",
     "UiLevelSelect_Title": "関所",
     "UiLevelSelect_Back": "戻る",

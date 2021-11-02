@@ -1,4 +1,8 @@
 {
+    "UiHome_InfiniteTip":"Continue playing Classic Mode to unlock.",
+    "UiHome_ChallengeTip":"Continue playing Classic Mode to unlock.",
+    "UiHome_Lock": "LOCK",
+    "UiLevelSelect_LockTip": "Unlock with the previous level.",
     "UiLevelSelect_Lock": "LOCK",
     "UiLevelSelect_Title": "LEVEL",
     "UiLevelSelect_Back": "Back",
