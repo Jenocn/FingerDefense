@@ -36,7 +36,10 @@ namespace Game.Views {
                 GameApplication.SaveCommonArchive();
                 PopThisUI();
             });
-            ui.Find("ButtonTest")?.GetComponent<Button>().onClick.AddListener(() => {
+
+            var buttonTest = ui.Find("ButtonTest");
+            buttonTest?.gameObject.SetActive(false);
+            buttonTest?.GetComponent<Button>().onClick.AddListener(() => {
                 uiStack.PushUI<UiScoreShow>();
             });
 

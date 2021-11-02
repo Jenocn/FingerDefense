@@ -98,9 +98,9 @@ namespace Game.Views {
                 if (index0 < _normalIDs.Count) {
                     var mapID = _normalIDs[index0];
                     item.id = mapID;
-                    var star = Mathf.Clamp(_scoreManager.GetClassicStar(mapID), 0, 3);
-                    item.textRank.text = _starList[star];
-                    item.panelLock.gameObject.SetActive(_mapManager.IsClassicLocked(mapID));
+                    bool bLock = _mapManager.IsClassicLocked(mapID);
+                    item.textRank.text = _starList[bLock ? 0 : 3];
+                    item.panelLock.gameObject.SetActive(bLock);
                     item.transform.gameObject.SetActive(true);
                 } else {
                     item.transform.gameObject.SetActive(false);

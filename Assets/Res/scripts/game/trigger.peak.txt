@@ -57,7 +57,6 @@ function home_loaded() {
 
 // 关卡选择加载完成
 function level_select_loaded() {
-	music(MusicChannelType.BGM, "music_battle_001", 1, true);
 }
 
 // 战斗开始
