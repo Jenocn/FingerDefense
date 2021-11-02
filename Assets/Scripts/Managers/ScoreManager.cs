@@ -32,7 +32,10 @@ namespace Game.Managers {
 		}
 
 		public int GetClassicStar(int mapID) {
-			// temp todo...
+			var score = GetHighestScore(MapMode.Classic, mapID);
+			if (score > 0) {
+				return 3;
+			}
 			return 0;
 		}
 
