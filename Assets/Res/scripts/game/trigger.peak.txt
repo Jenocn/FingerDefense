@@ -108,8 +108,6 @@ function infinite_generate(index, x, y) {
 	} else {
 		id = BrickType.Spawn;
 	}
-
-	var hp = Random.Range(1, 4);
 	
-	create_infinite_brick(index, id, x, y, hp);
+	create_infinite_brick(index, id, x, y, Random.Range(1, 4));
 }
