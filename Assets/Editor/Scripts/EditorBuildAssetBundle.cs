@@ -42,8 +42,12 @@ public class EditorBuildAssetBundle {
     private static void BuildXBoxOne() {
         BuildAssets(BuildTarget.XboxOne);
     }
+	[MenuItem("Assets/AssetBundle/Build for WebGL")]
+	private static void BuildWebGL() {
+		BuildAssets(BuildTarget.WebGL);
+	}
 
-    private static void BuildAssets(BuildTarget target) {
+	private static void BuildAssets(BuildTarget target) {
         var dir = "user/build_assets/" + target.ToString();
         if (!Directory.Exists("user")) {
             Directory.CreateDirectory("user");
