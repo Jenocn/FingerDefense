@@ -8,7 +8,7 @@
 实现了一个游戏的基本流程。
 
 ## 砖块功能 
-![](Arts/original/brick_atals_p200.png)
+![](brick_atals_p200.png)
 
 - 红色砖块：撞击1次破坏
 - 绿色砖块：撞击2次破坏
@@ -17,8 +17,8 @@
 - 黄色砖块：破坏后小球额外生成一个
 
 ## 游戏截图 
-![](readme/1.png)
-![](readme/2.png)
-![](readme/3.png)
-![](readme/4.png)
-![](readme/5.png)
+![](1.png)
+![](2.png)
+![](3.png)
+![](4.png)
+![](5.png)
